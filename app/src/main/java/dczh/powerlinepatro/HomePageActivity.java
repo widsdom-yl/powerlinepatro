@@ -25,7 +25,7 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
         list.add(getString(R.string.string_homepage1));
         list.add(getString(R.string.string_homepage2));
         list.add(getString(R.string.string_homepage3));
-        
+
         initView();
     }
     void initView(){
