@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">PowerLinePatro</string>
+    <string name="txtLogin">登录</string>
+    <string name="action_check_remeber_pwd">自动登录</string>
+    <string name="string_user">用户名</string>
+    <string name="string_user_password">登录密码</string>
+    <string name="string_main_title">欢迎您,</string>
+    <string name="string_homepage0">线路巡视</string>
+    <string name="string_homepage1">巡视状况</string>
+    <string name="string_homepage2">缺陷信息</string>
+    <string name="string_homepage3">个人中心</string>
+    <string name="string_uploadposition">上传轨迹</string>
+</resources>

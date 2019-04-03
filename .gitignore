@@ -32,6 +32,8 @@ proguard/
 # Android Studio captures folder
 captures/
 
+线路巡检素材/
+
 # IntelliJ
 *.iml
 .idea/workspace.xml
