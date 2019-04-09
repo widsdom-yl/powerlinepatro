@@ -1,5 +1,6 @@
 package dczh.powerlinepatro;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,7 +41,14 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
 
     @Override
     public void onItemClick(View view, int position) {
-
+        switch (position){
+            case 0:
+                Intent intent = new Intent(this, LinePatroActivity.class);
+                startActivity(intent);
+                break;
+                default:
+                    break;
+        }
     }
 
     @Override

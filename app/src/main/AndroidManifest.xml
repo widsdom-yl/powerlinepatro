@@ -2,7 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="dczh.powerlinepatro">
 
+    <!-- To access Google+ APIs: -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
+        android:name="dczh.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -11,7 +15,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/Theme.LoginTheme"></activity>
+            android:theme="@style/Theme.LoginTheme" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/Theme.MyAppTheme">
@@ -21,7 +25,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HomePageActivity"></activity>
+        <activity android:name=".HomePageActivity" />
+        <activity android:name=".LinePatroActivity" />
+        <activity android:name=".LineDetailActivity" />
+        <activity android:name=".TowerPatroActivity" />
     </application>
 
 </manifest>
