@@ -4,20 +4,21 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import dczh.adapter.DefectAdapter;
+import dczh.model.TowerDefectModel;
 import dczh.powerlinepatro.R;
 
-/**
- * A fragment with a Google +1 button.
- * Activities that contain this fragment must implement the
- * {@link LedgerFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link LedgerFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class DefectFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,6 +33,11 @@ public class DefectFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    RecyclerView mRecyclerView;
+    DefectAdapter mAapter;
+    List<TowerDefectModel> list = new ArrayList<TowerDefectModel>();
+
 
     public DefectFragment() {
         // Required empty public constructor
@@ -69,10 +75,27 @@ public class DefectFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_defect, container, false);
-
-
+        initView(view);
         return view;
     }
+
+    void initView(View view){
+        mRecyclerView = view.findViewById(R.id.recyler_tower_defect);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        initValue();
+    }
+    void initValue(){
+        for (int i=0;i<5;++i){
+            TowerDefectModel model = new TowerDefectModel("线路杆塔","2019-4-13 12:50","张三"+i,true);
+            list.add(model);
+        }
+
+        mAapter = new DefectAdapter(list);
+        mRecyclerView.setAdapter(mAapter);
+
+    }
+
 
     @Override
     public void onResume() {
