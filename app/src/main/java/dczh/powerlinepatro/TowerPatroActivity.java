@@ -12,8 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import dczh.Fragment.DefectFragment;
-import dczh.Fragment.LedgerFragment;
 import dczh.Fragment.MapFragment;
+import dczh.Fragment.TowerAccountFragment;
 import dczh.model.LineTowerModel;
 
 //杆塔巡视信息 台账 位置 缺陷信息
@@ -87,7 +87,7 @@ public class TowerPatroActivity extends BaseAppCompatActivity implements View.On
 
 
         content_container = (LinearLayout) findViewById(R.id.content_container);
-        f1 = LedgerFragment.newInstance("t","1");
+        f1 = TowerAccountFragment.newInstance("t","1");
         f2 = MapFragment.newInstance("t","2");
         f3 = DefectFragment.newInstance("t","3");
 

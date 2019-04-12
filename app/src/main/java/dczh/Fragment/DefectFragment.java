@@ -11,11 +11,11 @@ import android.view.ViewGroup;
 import dczh.powerlinepatro.R;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A fragment with a Google +1 button.
  * Activities that contain this fragment must implement the
- * {@link DefectFragment.OnFragmentInteractionListener} interface
+ * {@link LedgerFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link DefectFragment#newInstance} factory method to
+ * Use the {@link LedgerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class DefectFragment extends Fragment {
@@ -23,7 +23,10 @@ public class DefectFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    // The request code must be 0 or greater.
+    private static final int PLUS_ONE_REQUEST_CODE = 0;
+    // The URL to +1.  Must be a valid URL.
+    private final String PLUS_ONE_URL = "http://developer.android.com";
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -40,7 +43,7 @@ public class DefectFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment DefectFragment.
+     * @return A new instance of fragment LedgerFragment.
      */
     // TODO: Rename and change types and number of parameters
     public static DefectFragment newInstance(String param1, String param2) {
@@ -65,7 +68,18 @@ public class DefectFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_defect, container, false);
+        View view = inflater.inflate(R.layout.fragment_defect, container, false);
+
+
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Refresh the state of the +1 button each time the activity receives focus.
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -106,4 +120,5 @@ public class DefectFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

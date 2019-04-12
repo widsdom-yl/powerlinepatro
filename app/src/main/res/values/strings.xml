@@ -26,6 +26,12 @@
     <string name="string_height">高度</string>
     <string name="string_position">位置</string>
     <string name="string_defectinfo">缺陷信息</string>
+    <string name="string_tower_account_name">杆塔名称</string>
+    <string name="string_tower_account_type">杆塔类型</string>
+    <string name="string_tower_account_type_detail">杆塔塔型</string>
+    <string name="string_tower_account_height">杆塔高度</string>
+    <string name="string_tower_account_big_distance">大号侧档距</string>
+    <string name="string_tower_account_all_distance">累加档距</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
