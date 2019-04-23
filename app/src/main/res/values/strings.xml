@@ -36,7 +36,11 @@
     <string name="string_tower_defect_upload_time">提交时间:</string>
     <string name="string_tower_defect_status_unhandled">未处理</string>
     <string name="string_tower_defect_upload_worker">提交人:</string>
-
+    <string name="string_sign_defect">缺陷登记</string>
+    <string name="string_sign_patro">巡视登记</string>
+    <string name="string_album">从相册中选取</string>
+    <string name="string_take_photo">拍照</string>
+    <string name="string_cancel">取消</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

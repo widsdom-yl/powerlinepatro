@@ -22,6 +22,7 @@ public class LineDetailActivity extends BaseAppCompatActivity implements BaseAda
     LineTowerAdapter mAapter;
     RecyclerView mRecyclerView;
     List<LineTowerModel> list=new ArrayList<LineTowerModel>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

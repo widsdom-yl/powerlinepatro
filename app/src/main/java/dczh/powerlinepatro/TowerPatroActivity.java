@@ -87,7 +87,7 @@ public class TowerPatroActivity extends BaseAppCompatActivity implements View.On
 
 
         content_container = (LinearLayout) findViewById(R.id.content_container);
-        f1 = TowerAccountFragment.newInstance("t","1");
+        f1 = TowerAccountFragment.newInstance(model,"1");
         f2 = MapFragment.newInstance("t","2");
         f3 = DefectFragment.newInstance("t","3");
 
