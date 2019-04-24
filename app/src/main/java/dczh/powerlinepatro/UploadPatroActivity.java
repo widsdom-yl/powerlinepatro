@@ -1,6 +1,17 @@
 package dczh.powerlinepatro;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -8,11 +19,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.zhy.base.fileprovider.FileProvider7;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import dczh.Util.FileUtil;
 import dczh.View.ActionSheet;
 import dczh.model.LineTowerModel;
 
@@ -88,35 +105,119 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
     }
     private void showSheet() {
         actionSheet=new ActionSheet.DialogBuilder(this)
-                .addSheet("雷军", new View.OnClickListener() {
+                .addSheet(getString(R.string.string_album), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(UploadPatroActivity.this, "当然是雷布斯！", Toast.LENGTH_SHORT).show();
+                        chooseFromAlbum();
                         actionSheet.dismiss();
                     }
                 })
-                .addSheet("马化腾", new View.OnClickListener() {
+                .addSheet(getString(R.string.string_take_photo), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(UploadPatroActivity.this, "当然是小马哥！", Toast.LENGTH_SHORT).show();
+                        chooseFromTakePhoto();
                         actionSheet.dismiss();
                     }
                 })
-                .addSheet("马云", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(UploadPatroActivity.this, "当然是马爸爸！", Toast.LENGTH_SHORT).show();
-                        actionSheet.dismiss();
-                    }
-                })
+
                 .addCancelListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(UploadPatroActivity.this, "容我三思", Toast.LENGTH_SHORT).show();
+
                         actionSheet.dismiss();
                     }
                 })
                 .create();
     }
+    void chooseFromAlbum(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            //未授权，申请授权(从相册选择图片需要读取存储卡的权限)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, RC_CHOOSE_PHOTO);
+        } else {
+            //已授权，获取照片
+            choosePhoto();
+        }
+    }
+    void chooseFromTakePhoto(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            //未授权，申请授权(从相册选择图片需要读取存储卡的权限)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, RC_TAKE_PHOTO);
+        } else {
+            //已授权，获取照片
+            takePhoto();
+        }
+    }
+    private void choosePhoto() {
+        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
+        intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
+    }
+
+    private String mTempPhotoPath;
+    private Uri imageUri;
+
+    private void takePhoto() {
+        Intent intentToTakePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File fileDir = new File(Environment.getExternalStorageDirectory().getPath() + File.separator + "photoTest" + File.separator);
+        if (!fileDir.exists()) {
+            fileDir.mkdirs();
+        }
+
+        File photoFile = new File(fileDir, "photo.jpeg");
+        mTempPhotoPath = photoFile.getAbsolutePath();
+        imageUri = FileProvider7.getUriForFile(this,photoFile);
+        intentToTakePhoto.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(intentToTakePhoto, RC_TAKE_PHOTO);
+    }
+
+
+    /**
+     权限申请结果回调
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case RC_TAKE_PHOTO:   //拍照权限申请返回
+                if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    takePhoto();
+                }
+                break;
+            case RC_CHOOSE_PHOTO:   //相册选择照片权限申请返回
+                choosePhoto();
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case RC_CHOOSE_PHOTO:
+                Uri uri = data.getData();
+                String filePath = FileUtil.getFilePathByUri(this, uri);
+
+                if (!TextUtils.isEmpty(filePath)) {
+                    RequestOptions requestOptions1 = new RequestOptions().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE);
+//                    将照片显示在 ivImage上
+                    Glide.with(this).load(filePath).apply(requestOptions1).into(imageView);
+                }
+                break;
+            case RC_TAKE_PHOTO:
+                if (resultCode == -1){
+                    RequestOptions requestOptions = new RequestOptions().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE);
+                    //将图片显示在ivImage上
+                    Glide.with(this).load(mTempPhotoPath).apply(requestOptions).into(imageView);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+
+
+
+
 
 }

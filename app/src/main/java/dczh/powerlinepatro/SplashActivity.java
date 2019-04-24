@@ -9,14 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 
 
 public class SplashActivity extends AppCompatActivity {
-    String[] permissions = new String[]{
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.CAMERA,
-            Manifest.permission.RECORD_AUDIO,
-            Manifest.permission.MODIFY_AUDIO_SETTINGS,
-            Manifest.permission.ACCESS_WIFI_STATE,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +29,10 @@ public class SplashActivity extends AppCompatActivity {
         }, 1 * 1000);
 
     }
-    private String[] denied;
+
+
+
+
 
 
 
