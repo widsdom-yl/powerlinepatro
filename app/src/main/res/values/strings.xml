@@ -43,6 +43,13 @@
     <string name="string_cancel">取消</string>
     <string name="string_submit">提交</string>
     <string name="string_remark">备注:</string>
+    <string name="string_partol_worker">巡视人:</string>
+    <string name="string_partol_detail">巡视详情:</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="string_upload_time">上报时间:</string>
+    <string name="string_defect_status">缺陷状态:</string>
+    <string name="string_upload_worker">上报人:</string>
+    <string name="string_handle">已处理</string>
+    <string name="string_unhandle">未处理</string>
 </resources>

@@ -1,6 +1,7 @@
 package dczh.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,12 +15,15 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import dczh.adapter.BaseAdapter;
 import dczh.adapter.DefectAdapter;
+import dczh.model.LineTowerModel;
 import dczh.model.TowerDefectModel;
+import dczh.powerlinepatro.DefectDetailActivity;
 import dczh.powerlinepatro.R;
 
 
-public class DefectFragment extends Fragment {
+public class DefectFragment extends Fragment implements BaseAdapter.OnItemClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -37,7 +41,7 @@ public class DefectFragment extends Fragment {
     RecyclerView mRecyclerView;
     DefectAdapter mAapter;
     List<TowerDefectModel> list = new ArrayList<TowerDefectModel>();
-
+    private LineTowerModel model;
 
     public DefectFragment() {
         // Required empty public constructor
@@ -47,15 +51,15 @@ public class DefectFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
+     * @param model Parameter 1.
      * @param param2 Parameter 2.
      * @return A new instance of fragment LedgerFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DefectFragment newInstance(String param1, String param2) {
+    public static DefectFragment newInstance(LineTowerModel model, String param2) {
         DefectFragment fragment = new DefectFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putSerializable(ARG_PARAM1, model);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -65,7 +69,7 @@ public class DefectFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            model = (LineTowerModel)getArguments().getSerializable(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -92,7 +96,9 @@ public class DefectFragment extends Fragment {
         }
 
         mAapter = new DefectAdapter(list);
+
         mRecyclerView.setAdapter(mAapter);
+        mAapter.setOnItemClickListener(this);
 
     }
 
@@ -127,6 +133,20 @@ public class DefectFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Intent intent = new Intent(this.getContext(), DefectDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ARG_PARAM1,model);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onLongClick(View view, int position) {
+
     }
 
     /**

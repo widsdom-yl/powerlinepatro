@@ -53,7 +53,9 @@
 
         <activity android:name=".UploadPatroActivity" />
         <activity android:name=".PatrolImageDetailActivity" />
-        <activity android:name=".UploadDefectActivity"></activity>
+        <activity android:name=".UploadDefectActivity" />
+        <activity android:name=".PartolDetailActivity" />
+        <activity android:name=".DefectDetailActivity"></activity>
     </application>
 
 </manifest>
