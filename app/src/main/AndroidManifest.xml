@@ -14,11 +14,11 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!-- 允许程序访问CellID或WiFi热点来获取粗略的位置 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <!--写入SD卡的权限：如果你希望保存相机拍照后的照片-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 写入SD卡的权限：如果你希望保存相机拍照后的照片 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name="dczh.MyApplication"
@@ -49,9 +49,10 @@
         <activity android:name=".LineDetailActivity" />
         <activity android:name=".TowerPatroActivity" />
 
-        <service android:name="com.amap.api.location.APSService"></service>
+        <service android:name="com.amap.api.location.APSService" />
 
-        <activity android:name=".UploadPatroActivity"></activity>
+        <activity android:name=".UploadPatroActivity" />
+        <activity android:name=".PatrolImageDetailActivity"></activity>
     </application>
 
 </manifest>

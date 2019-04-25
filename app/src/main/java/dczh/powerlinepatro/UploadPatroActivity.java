@@ -11,6 +11,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,9 +22,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.zhy.base.fileprovider.FileProvider7;
 
 import java.io.File;
@@ -31,15 +30,19 @@ import java.util.List;
 
 import dczh.Util.FileUtil;
 import dczh.View.ActionSheet;
+import dczh.adapter.BaseAdapter;
+import dczh.adapter.TowerProtolEditImageAdapter;
 import dczh.model.LineTowerModel;
 
 //上传巡视图片
-public class UploadPatroActivity extends BaseAppCompatActivity implements View.OnClickListener {
+public class UploadPatroActivity extends BaseAppCompatActivity implements View.OnClickListener, BaseAdapter.OnItemClickListener, TowerProtolEditImageAdapter.DeleteClickListener {
     private static final String ARG_PARAM1 = "param1";
     private LineTowerModel model;
     private Spinner spinner;
     private List<String> data_list;
     private ArrayAdapter<String> arr_adapter;
+    private TowerProtolEditImageAdapter mAdpter;
+    private RecyclerView mRecyclerView;
 
     Button button_choose_image;
     ImageView imageView;
@@ -48,6 +51,11 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
     public static final int RC_TAKE_PHOTO = 1;
     public static final int RC_CHOOSE_PHOTO = 2;
     /******************************************/
+
+    List<String> mFileArray = new ArrayList<>();
+    Integer mTakePhotoIndex = 0;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,9 +85,18 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         spinner.setAdapter(arr_adapter);
 
         /***************************************/
-        button_choose_image = findViewById(R.id.button_choose_image);
-        imageView = findViewById(R.id.imageView2);
-        button_choose_image.setOnClickListener(this);
+//        button_choose_image = findViewById(R.id.button_choose_image);
+//        imageView = findViewById(R.id.imageView2);
+//        button_choose_image.setOnClickListener(this);
+
+        mRecyclerView = findViewById(R.id.recyler_inspect_signin_image);
+        GridLayoutManager layoutManage = new GridLayoutManager(this, 3);
+        mRecyclerView.setLayoutManager(layoutManage);
+        mAdpter = new TowerProtolEditImageAdapter(mFileArray);
+        mRecyclerView.setAdapter(mAdpter);
+        mFileArray.add("");
+        mAdpter.setOnItemClickListener(this);
+        mAdpter.setmDeleteClickListener(this);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -163,7 +180,7 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
             fileDir.mkdirs();
         }
 
-        File photoFile = new File(fileDir, "photo.jpeg");
+        File photoFile = new File(fileDir, "photo"+mTakePhotoIndex+".jpeg");
         mTempPhotoPath = photoFile.getAbsolutePath();
         imageUri = FileProvider7.getUriForFile(this,photoFile);
         intentToTakePhoto.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
@@ -198,16 +215,42 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
                 String filePath = FileUtil.getFilePathByUri(this, uri);
 
                 if (!TextUtils.isEmpty(filePath)) {
-                    RequestOptions requestOptions1 = new RequestOptions().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE);
+                    //RequestOptions requestOptions1 = new RequestOptions().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE);
 //                    将照片显示在 ivImage上
-                    Glide.with(this).load(filePath).apply(requestOptions1).into(imageView);
+                    //Glide.with(this).load(filePath).apply(requestOptions1).into(imageView);
+//                    mFileArray.add(filePath);
+                    if (mFileArray.size() == 6){
+                        mFileArray.remove(5);
+                        mFileArray.add(filePath);
+                    }
+                    else{
+                        mFileArray.add(mFileArray.size()-1,filePath);
+                    }
+
+                    mAdpter.resetMList(mFileArray);
+                    mAdpter.notifyDataSetChanged();
                 }
                 break;
             case RC_TAKE_PHOTO:
                 if (resultCode == -1){
-                    RequestOptions requestOptions = new RequestOptions().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE);
+                    ++mTakePhotoIndex;
+//                    mFileArray.add(mTempPhotoPath);
+
+
+                    if (mFileArray.size() == 6){
+                        mFileArray.remove(5);
+                        mFileArray.add(mTempPhotoPath);
+                    }
+                    else{
+                        mFileArray.add(mFileArray.size()-1,mTempPhotoPath);
+                    }
+
+
+                    mAdpter.resetMList(mFileArray);
+                    mAdpter.notifyDataSetChanged();
+                    //RequestOptions requestOptions = new RequestOptions().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE);
                     //将图片显示在ivImage上
-                    Glide.with(this).load(mTempPhotoPath).apply(requestOptions).into(imageView);
+                    //Glide.with(this).load(mTempPhotoPath).apply(requestOptions).into(imageView);
                 }
                 break;
             default:
@@ -216,8 +259,32 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
     }
 
 
+    @Override
+    public void onItemClick(View view, int position) {
+        if (position == mFileArray.size() -1 && mFileArray.get(position).length() == 0){
+            showSheet();
+        }
+        else{
+           // PatrolImageDetailActivity
+            Intent intent = new Intent(this, PatrolImageDetailActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString(ARG_PARAM1,mFileArray.get(position));
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
 
+    }
 
+    @Override
+    public void onLongClick(View view, int position) {
 
+    }
 
+    @Override
+    public void onDeleteBtnCilck(View view, int position) {
+        mFileArray.remove(position);
+        mAdpter.resetMList(mFileArray);
+        mAdpter.notifyDataSetChanged();
+
+    }
 }
