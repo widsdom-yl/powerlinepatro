@@ -42,6 +42,7 @@
     <string name="string_take_photo">拍照</string>
     <string name="string_cancel">取消</string>
     <string name="string_submit">提交</string>
+    <string name="string_remark">备注:</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

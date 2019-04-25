@@ -52,7 +52,8 @@
         <service android:name="com.amap.api.location.APSService" />
 
         <activity android:name=".UploadPatroActivity" />
-        <activity android:name=".PatrolImageDetailActivity"></activity>
+        <activity android:name=".PatrolImageDetailActivity" />
+        <activity android:name=".UploadDefectActivity"></activity>
     </application>
 
 </manifest>

@@ -24,6 +24,7 @@ import dczh.adapter.TowerPartoImageAdapter;
 import dczh.model.LineTowerModel;
 import dczh.model.TowerAccountItemModel;
 import dczh.powerlinepatro.R;
+import dczh.powerlinepatro.UploadDefectActivity;
 import dczh.powerlinepatro.UploadPatroActivity;
 
 
@@ -167,7 +168,11 @@ public class TowerAccountFragment extends Fragment implements View.OnClickListen
             startActivity(intent);
         }
         else{
-
+            Intent intent = new Intent(this.getContext(), UploadDefectActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(ARG_PARAM1,model);
+            intent.putExtras(bundle);
+            startActivity(intent);
         }
     }
 

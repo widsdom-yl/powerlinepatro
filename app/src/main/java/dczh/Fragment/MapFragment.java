@@ -15,7 +15,9 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MyLocationStyle;
 
 import java.text.SimpleDateFormat;
@@ -175,6 +177,8 @@ public class MapFragment extends Fragment implements AMap.OnMyLocationChangeList
     public void onMyLocationChange(Location location) {
 
         Log.e("MapFragment","x:"+location.getLatitude());
+        LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
+        aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,16));
     }
 
 
