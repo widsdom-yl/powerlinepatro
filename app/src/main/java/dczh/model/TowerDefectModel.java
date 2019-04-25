@@ -1,9 +1,11 @@
 package dczh.model;
 
+import java.io.Serializable;
+
 import dczh.MyApplication;
 import dczh.powerlinepatro.R;
 
-public class TowerDefectModel {
+public class TowerDefectModel implements Serializable {
     String tower;
 
     public TowerDefectModel(String tower, String towerDefectTime, String towerDefectWorker, boolean status) {

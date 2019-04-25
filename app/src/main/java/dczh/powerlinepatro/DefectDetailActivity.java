@@ -15,14 +15,14 @@ import java.util.List;
 import dczh.Util.MathUtil;
 import dczh.adapter.TowerAccountAdapter;
 import dczh.adapter.TowerPartoImageAdapter;
-import dczh.model.LineTowerModel;
 import dczh.model.TowerAccountItemModel;
+import dczh.model.TowerDefectModel;
 
 public class DefectDetailActivity extends BaseAppCompatActivity {
 
     RecyclerView mRecyclerView_item;
     RecyclerView mRecyclerView_image;
-    LineTowerModel model;
+    TowerDefectModel model;
     TowerAccountAdapter mAapter;
     TowerPartoImageAdapter mPatroAdapter;
     private static final String ARG_PARAM1 = "param1";
@@ -38,8 +38,8 @@ public class DefectDetailActivity extends BaseAppCompatActivity {
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null && actionBar != null)
         {
-            model = (LineTowerModel)bundle.getSerializable(ARG_PARAM1);
-            setCustomTitle(model.getTowerName(), true);
+            model = (TowerDefectModel)bundle.getSerializable(ARG_PARAM1);
+            setCustomTitle(model.getTower(), true);
         }
 
         mRecyclerView_item = findViewById(R.id.recyler_tower_patrol);

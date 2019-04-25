@@ -139,7 +139,7 @@ public class DefectFragment extends Fragment implements BaseAdapter.OnItemClickL
     public void onItemClick(View view, int position) {
         Intent intent = new Intent(this.getContext(), DefectDetailActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(ARG_PARAM1,model);
+        bundle.putSerializable(ARG_PARAM1,list.get(position));
         intent.putExtras(bundle);
         startActivity(intent);
     }
