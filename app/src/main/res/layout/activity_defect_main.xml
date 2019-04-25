@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DefectMainActivity">
+
+    <Button
+        android:id="@+id/button_defect_info"
+        android:layout_width="175dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="150dp"
+        android:text="@string/string_defect"
+        android:background="@drawable/button_shape_upload_patro"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/White"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+
+        android:id="@+id/button_upload_defect"
+        android:layout_width="175dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="80dp"
+        android:text="@string/string_signin"
+        android:textColor="@color/White"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/button_shape_upload_defect"
+        app:layout_constraintTop_toBottomOf="@+id/button_defect_info" />
+</android.support.constraint.ConstraintLayout>

@@ -62,7 +62,10 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
         setContentView(R.layout.activity_upload_defect);
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         Bundle bundle = this.getIntent().getExtras();
-        model = (LineTowerModel)bundle.getSerializable(ARG_PARAM1);
+        if (bundle != null){
+            model = (LineTowerModel)bundle.getSerializable(ARG_PARAM1);
+        }
+
         if ( actionBar != null)
         {
             setCustomTitle(getString(R.string.string_sign_defect), true);
@@ -72,7 +75,13 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
         spinner = findViewById(R.id.spinner);
         //数据
         data_list = new ArrayList<String>();
-        data_list.add(model.getTowerName());
+        if (model == null){
+            data_list.add(getString(R.string.string_locate_by_hand));
+        }
+        else{
+            data_list.add(model.getTowerName());
+        }
+
         data_list.add("上海");
         data_list.add("广州");
         data_list.add("深圳");

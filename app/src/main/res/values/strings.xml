@@ -52,4 +52,6 @@
     <string name="string_upload_worker">上报人:</string>
     <string name="string_handle">已处理</string>
     <string name="string_unhandle">未处理</string>
+    <string name="string_signin">登记</string>
+    <string name="string_locate_by_hand">手动定位</string>
 </resources>

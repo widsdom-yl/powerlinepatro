@@ -46,6 +46,11 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
                 Intent intent = new Intent(this, LinePatroActivity.class);
                 startActivity(intent);
                 break;
+            case 2:
+
+                Intent intent2 = new Intent(this, DefectMainActivity.class);
+                startActivity(intent2);
+                break;
                 default:
                     break;
         }
