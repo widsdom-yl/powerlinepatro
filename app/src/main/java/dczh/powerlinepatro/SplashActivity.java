@@ -1,7 +1,7 @@
 package dczh.powerlinepatro;
 //https://lanhuapp.com/url/7RsrQ
-
-import android.Manifest;
+//http://gz.aliyuns.vip/adm/log.php
+//https://www.showdoc.cc/317380933238324
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;

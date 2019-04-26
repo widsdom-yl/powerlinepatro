@@ -54,4 +54,8 @@
     <string name="string_unhandle">未处理</string>
     <string name="string_signin">登记</string>
     <string name="string_locate_by_hand">手动定位</string>
+    <string name="error_field_required">请输入有效信息</string>
+
+    <string name="error_login_failed">登录失败，请检查用户名和密码</string>
+    <string name="login_success">登录成功</string>
 </resources>
