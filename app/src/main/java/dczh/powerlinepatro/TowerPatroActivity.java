@@ -37,7 +37,7 @@ public class TowerPatroActivity extends BaseAppCompatActivity implements View.On
         if (bundle != null && actionBar != null)
         {
             model = (LineTowerModel)bundle.getSerializable("lineTowerName");
-            setCustomTitle(model.getTowerName(), true);
+            setCustomTitle(model.getNme(), true);
         }
         init();
         if (savedInstanceState == null){

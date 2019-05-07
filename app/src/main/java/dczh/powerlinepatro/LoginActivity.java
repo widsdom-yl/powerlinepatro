@@ -208,7 +208,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Bundle bundle = new Bundle();
                             bundle.putInt("uid",userModel.getUid());
                             intent.putExtras(bundle);
-
+                            AccountManager.getInstance().setUid(userModel.getUid());
+                            AccountManager.getInstance().setToken(userModel.getToken());
                             startActivity(intent);
                             LoginActivity.this.finish();
                             Toast.makeText(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_LONG).show();
@@ -264,7 +265,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             String permission = denied[i];
             for (int j = 0; j < permissions.length; j++)
             {
-                if (permissions[j].equals(permission))
+                if (permissions[j] != null && permissions[j].equals(permission))
                 {
                     if (grantResults[j] != PackageManager.PERMISSION_GRANTED)
                     {

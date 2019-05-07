@@ -38,7 +38,7 @@ public class PartolDetailActivity extends BaseAppCompatActivity {
         if (bundle != null && actionBar != null)
         {
             model = (LineTowerModel)bundle.getSerializable(ARG_PARAM1);
-            setCustomTitle(model.getTowerName(), true);
+            setCustomTitle(model.getNme(), true);
         }
 
         mRecyclerView_item = findViewById(R.id.recyler_tower_patrol);

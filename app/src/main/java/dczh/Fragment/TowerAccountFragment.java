@@ -133,16 +133,16 @@ public class TowerAccountFragment extends Fragment implements View.OnClickListen
         initValue();
     }
     void initValue(){
-        TowerAccountItemModel model1 = new TowerAccountItemModel(getContext().getString(R.string.string_tower_account_name),"小魏1线1#");
-        TowerAccountItemModel model2 = new TowerAccountItemModel(getContext().getString(R.string.string_tower_account_type),"耐张");
-        TowerAccountItemModel model3 = new TowerAccountItemModel(getContext().getString(R.string.string_tower_account_type_detail),"SDGT-16");
+        TowerAccountItemModel model1 = new TowerAccountItemModel(getContext().getString(R.string.string_tower_account_name),model.getNme());
+        TowerAccountItemModel model2 = new TowerAccountItemModel(getContext().getString(R.string.string_tower_account_type),model.getTpe());
+//        TowerAccountItemModel model3 = new TowerAccountItemModel(getContext().getString(R.string.string_tower_account_type_detail),"SDGT-16");
 //        TowerAccountItemModel model4 = new TowerAccountItemModel(getContext().getString(R.string.string_tower_account_height),"23.1");
 //        TowerAccountItemModel model5 = new TowerAccountItemModel(getContext().getString(R.string.string_tower_account_big_distance),"117m");
 //        TowerAccountItemModel model6 = new TowerAccountItemModel(getContext().getString(R.string.string_tower_account_all_distance),"230m");
 
         list.add(model1);
         list.add(model2);
-        list.add(model3);
+//        list.add(model3);
 //        list.add(model4);
 //        list.add(model5);
 //        list.add(model6);

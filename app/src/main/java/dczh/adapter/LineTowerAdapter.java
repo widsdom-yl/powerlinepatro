@@ -27,10 +27,11 @@ public class LineTowerAdapter extends BaseAdapter<LineTowerModel>
         TextView towerTypeTv = holder.getView(R.id.text_tower_type);
         TextView towerTypeDetailTv = holder.getView(R.id.text_tower_type_detail);
         TextView towerHeightTv = holder.getView(R.id.text_tower_height);
-        titleTv.setText( model.getTowerName());
-        towerTypeTv.setText(MyApplication.getInstance().getString(R.string.string_type)+model.getTowerType());
-        towerTypeDetailTv.setText(MyApplication.getInstance().getString(R.string.string_tower_type)+model.getTowerTypeDetail());
-        towerHeightTv.setText(MyApplication.getInstance().getString(R.string.string_height)+model.getTowerHeight());
+        titleTv.setText( model.getNme());
+        towerTypeTv.setText(MyApplication.getInstance().getString(R.string.string_type)+":" +
+                ""+model.getTpe());
+//        towerTypeDetailTv.setText(MyApplication.getInstance().getString(R.string.string_tower_type)+model.getTowerTypeDetail());
+//        towerHeightTv.setText(MyApplication.getInstance().getString(R.string.string_height)+model.getTowerHeight());
 
 
     }

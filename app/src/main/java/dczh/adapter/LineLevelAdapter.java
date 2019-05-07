@@ -12,16 +12,22 @@ import com.hgdendi.expandablerecycleradapter.BaseExpandableRecyclerViewAdapter;
 import java.util.List;
 
 import dczh.model.LineLevelModel;
-import dczh.model.LineNameModel;
+import dczh.model.LineModel;
 import dczh.powerlinepatro.R;
 
 public class LineLevelAdapter extends
-        BaseExpandableRecyclerViewAdapter<LineLevelModel, LineNameModel, LineLevelAdapter.GroupVH, LineLevelAdapter.ChildVH> {
+        BaseExpandableRecyclerViewAdapter<LineLevelModel, LineModel, LineLevelAdapter.GroupVH, LineLevelAdapter.ChildVH> {
 
     private List<LineLevelModel> mList;
 
     public LineLevelAdapter(List<LineLevelModel> list) {
         mList = list;
+    }
+    public void resetMList(List<LineLevelModel> list){
+        if (list != null){
+            mList = list;
+            this.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -58,15 +64,16 @@ public class LineLevelAdapter extends
 //            holder.foldIv.setVisibility(View.INVISIBLE);
 //        }
 
-        holder.view_title.setText(sampleGroupBean.getLineLevelName());
-        holder.view_linetower_count.setText(""+sampleGroupBean.getLineTowerCount());
-        holder.view_line_count.setText(""+sampleGroupBean.getLineCount());
+        holder.view_title.setText(sampleGroupBean.getCod());
+        //holder.view_linetower_count.setText(""+sampleGroupBean.getLineTowerCount());
+        List<LineModel>list = sampleGroupBean.getmList();
+        holder.view_line_count.setText(""+list.size());
 
     }
 
     @Override
-    public void onBindChildViewHolder(ChildVH holder, LineLevelModel groupBean, LineNameModel sampleChildBean) {
-        holder.text_linename.setText(sampleChildBean.getLineName());
+    public void onBindChildViewHolder(ChildVH holder, LineLevelModel groupBean, LineModel sampleChildBean) {
+        holder.text_linename.setText(sampleChildBean.getNme());
     }
 
     static class GroupVH extends BaseExpandableRecyclerViewAdapter.BaseGroupViewHolder {

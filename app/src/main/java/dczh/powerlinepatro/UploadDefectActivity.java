@@ -79,7 +79,7 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
             data_list.add(getString(R.string.string_locate_by_hand));
         }
         else{
-            data_list.add(model.getTowerName());
+            data_list.add(model.getNme());
         }
 
         data_list.add("上海");

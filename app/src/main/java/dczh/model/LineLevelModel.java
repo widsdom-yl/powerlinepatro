@@ -4,48 +4,30 @@ import com.hgdendi.expandablerecycleradapter.BaseExpandableRecyclerViewAdapter;
 
 import java.util.List;
 
-public class LineLevelModel implements BaseExpandableRecyclerViewAdapter.BaseGroupBean<LineNameModel>{
-    public String getLineLevelName() {
-        return lineLevelName;
+public class LineLevelModel implements BaseExpandableRecyclerViewAdapter.BaseGroupBean<LineModel>{
+
+
+    public String getCod() {
+        return cod;
     }
 
-    public int getLineCount() {
-        return lineCount;
+    public void setCod(String cod) {
+        this.cod = cod;
     }
 
-    public int getLineTowerCount() {
-        return lineTowerCount;
-    }
 
-    public void setLineLevelName(String lineLevelName) {
-        this.lineLevelName = lineLevelName;
-    }
+    String cod;
+    private List<LineModel> mList;
 
-    public void setLineCount(int lineCount) {
-        this.lineCount = lineCount;
-    }
-
-    public void setLineTowerCount(int lineTowerCount) {
-        this.lineTowerCount = lineTowerCount;
-    }
-    public LineLevelModel(String _lineLevelName,int _lineCount,int _lineTowerCount){
-        lineLevelName = _lineLevelName;
-        lineCount = _lineCount;
-        lineTowerCount = _lineTowerCount;
-    }
-    String lineLevelName;
-    int lineCount;
-    int lineTowerCount;
-
-    public List<LineNameModel> getmList() {
+    public List<LineModel> getmList() {
         return mList;
     }
 
-    public void setmList(List<LineNameModel> mList) {
+    public void setmList(List<LineModel> mList) {
         this.mList = mList;
     }
 
-    private List<LineNameModel> mList;
+
 
     @Override
     public int getChildCount() {
@@ -53,7 +35,7 @@ public class LineLevelModel implements BaseExpandableRecyclerViewAdapter.BaseGro
     }
 
     @Override
-    public LineNameModel getChildAt(int childIndex) {
+    public LineModel getChildAt(int childIndex) {
         return mList.size() <= childIndex ? null : mList.get(childIndex);
     }
 

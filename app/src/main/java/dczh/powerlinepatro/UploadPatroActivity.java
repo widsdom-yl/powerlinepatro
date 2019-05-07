@@ -14,6 +14,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,18 +22,33 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.zhy.base.fileprovider.FileProvider7;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import dczh.Manager.AccountManager;
+import dczh.Util.Config;
 import dczh.Util.FileUtil;
+import dczh.Util.GsonUtil;
 import dczh.View.ActionSheet;
+import dczh.View.LoadingDialog;
 import dczh.adapter.BaseAdapter;
 import dczh.adapter.TowerProtolEditImageAdapter;
+import dczh.model.LineModel;
 import dczh.model.LineTowerModel;
+import dczh.model.ResponseModel;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 //上传巡视图片
 public class UploadPatroActivity extends BaseAppCompatActivity implements View.OnClickListener, BaseAdapter.OnItemClickListener, TowerProtolEditImageAdapter.DeleteClickListener {
@@ -72,7 +88,7 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         spinner = findViewById(R.id.spinner);
         //数据
         data_list = new ArrayList<String>();
-        data_list.add(model.getTowerName());
+        data_list.add(model.getNme());
         data_list.add("上海");
         data_list.add("广州");
         data_list.add("深圳");
@@ -287,4 +303,71 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         mAdpter.notifyDataSetChanged();
 
     }
+/*上传文件*/
+    public void uploadImageData(String fileName){
+        if (lod == null)
+        {
+            lod = new LoadingDialog(this);
+        }
+        lod.dialogShow();
+
+
+        OkHttpClient client = new OkHttpClient();
+        FormBody formBody = new FormBody.Builder()
+                .add("uid",""+ AccountManager.getInstance().getUid())
+                .add("token", AccountManager.getInstance().getToken())
+                .add("ext", "jpg")
+                .add("file", "1000")
+
+                .build();
+
+
+        final Request request = new Request.Builder()
+                .url(Config.gblUrl+"upload.php")
+                .post(formBody)
+                .build();
+
+        Call call = client.newCall(request);
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                lod.dismiss();
+                Toast.makeText(UploadPatroActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String res = response.body().string();
+                Log.e(tag,"res is "+res);
+                final ResponseModel model  = GsonUtil.parseJsonWithGson(res,ResponseModel.class);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //
+                        lod.dismiss();
+                        if (model != null && model.error_code==0){
+                            String body = new Gson().toJson(model.data);
+                            List<LineModel> lists = GsonUtil.parseJsonArrayWithGson(body, LineModel[].class);
+
+
+                        }
+                        else{
+                            Toast.makeText(UploadPatroActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /*上传文件之后，提交结果*/
+    public void finishUploadImage(String fileName){
+
+    }
+
+    LoadingDialog lod;
+    static  final String tag = "UploadPatroActivity";
+
 }

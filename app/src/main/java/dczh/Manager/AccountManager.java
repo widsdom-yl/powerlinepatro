@@ -9,6 +9,26 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class AccountManager {
     private Context context;
+
+    public int getUid() {
+        return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    int uid;
+    String token;
+
     private static class AccountManagerHolder {
         private static final AccountManager INSTANCE = new AccountManager(MyApplication.getInstance());
     }

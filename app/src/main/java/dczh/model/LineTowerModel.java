@@ -3,50 +3,63 @@ package dczh.model;
 import java.io.Serializable;
 
 public class LineTowerModel implements Serializable {
-    String towerName;
-    String towerType;//类型
-    String towerTypeDetail;//塔型
-    Double towerHeight;//塔型
+    int pid;
+    int id;
+    String nme;
 
-    public LineTowerModel(String towerName, String towerType, String towerTypeDetail, Double towerHeight) {
-        this.towerName = towerName;
-        this.towerType = towerType;
-        this.towerTypeDetail = towerTypeDetail;
-        this.towerHeight = towerHeight;
+    public int getPid() {
+        return pid;
     }
 
-    public String getTowerName() {
-        return towerName;
+    public void setPid(int pid) {
+        this.pid = pid;
     }
 
-    public void setTowerName(String towerName) {
-        this.towerName = towerName;
+    public int getId() {
+        return id;
     }
 
-    public String getTowerType() {
-        return towerType;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setTowerType(String towerType) {
-        this.towerType = towerType;
+    public String getNme() {
+        return nme;
     }
 
-    public String getTowerTypeDetail() {
-        return towerTypeDetail;
+    public void setNme(String nme) {
+        this.nme = nme;
     }
 
-    public void setTowerTypeDetail(String towerTypeDetail) {
-        this.towerTypeDetail = towerTypeDetail;
+    public String getTpe() {
+        return tpe;
     }
 
-    public Double getTowerHeight() {
-        return towerHeight;
-
+    public void setTpe(String tpe) {
+        this.tpe = tpe;
     }
 
-    public void setTowerHeight(Double towerHeight) {
-        this.towerHeight = towerHeight;
+    public String getLot() {
+        return lot;
     }
+
+    public void setLot(String lot) {
+        this.lot = lot;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    String tpe;//类型
+    String lot;//
+    String lat;//
+
+
 
 
 }
