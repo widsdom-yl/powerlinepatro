@@ -149,7 +149,7 @@ public class LinePatroActivity extends BaseAppCompatActivity implements BaseExpa
         MediaType mediaType = MediaType.parse("application/data");
         final Request request = new Request.Builder()
                 .url(Config.workUrl+"line.php")
-                .post(formBody)
+                //.post(formBody)
                 .build();
 
         Call call = client.newCall(request);

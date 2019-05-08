@@ -30,6 +30,7 @@ import com.zhy.base.fileprovider.FileProvider7;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import dczh.Manager.AccountManager;
@@ -40,15 +41,22 @@ import dczh.View.ActionSheet;
 import dczh.View.LoadingDialog;
 import dczh.adapter.BaseAdapter;
 import dczh.adapter.TowerProtolEditImageAdapter;
-import dczh.model.LineModel;
 import dczh.model.LineTowerModel;
 import dczh.model.ResponseModel;
+import dczh.model.UploadFileRetModel;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
+import top.zibin.luban.CompressionPredicate;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 //上传巡视图片
 public class UploadPatroActivity extends BaseAppCompatActivity implements View.OnClickListener, BaseAdapter.OnItemClickListener, TowerProtolEditImageAdapter.DeleteClickListener {
@@ -113,6 +121,7 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         mFileArray.add("");
         mAdpter.setOnItemClickListener(this);
         mAdpter.setmDeleteClickListener(this);
+        findViewById(R.id.button_sign_parto).setOnClickListener(this);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -134,7 +143,13 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
 
     @Override
     public void onClick(View view) {
-        showSheet();
+        if (view.getId() == R.id.button_sign_parto){
+            if (mFileArray.size()>1){
+                //uploadImageData(mFileArray.get(0));
+                compressPhoto(mFileArray.get(0));
+            }
+        }
+
     }
     private void showSheet() {
         actionSheet=new ActionSheet.DialogBuilder(this)
@@ -303,6 +318,48 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         mAdpter.notifyDataSetChanged();
 
     }
+    public void compressPhoto(String fileName){
+        File fileDir = new File(Environment.getExternalStorageDirectory().getPath() + File.separator + "photoTest" + File.separator);
+        if (!fileDir.exists()) {
+            fileDir.mkdirs();
+        }
+
+
+
+        File file=new File(fileName);
+        Luban.with(this)
+                .load(file)
+                .ignoreBy(100)
+                .setTargetDir(fileDir.getAbsolutePath())
+                .filter(new CompressionPredicate() {
+                    @Override
+                    public boolean apply(String path) {
+                        boolean  ret =!(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
+                        return ret;
+                    }
+                })
+                .setCompressListener(new OnCompressListener() {
+                    @Override
+                    public void onStart() {
+                        Log.e(tag,"onStart");
+                        // TODO 压缩开始前调用，可以在方法内启动 loading UI
+
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        // TODO 压缩成功后调用，返回压缩后的图片文件
+                        Log.e(tag,"onSuccess");
+                        uploadImageData(file.getAbsolutePath());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(tag,"onError"+e.getLocalizedMessage());
+                        // TODO 当压缩过程出现问题时调用
+                    }
+                }).launch();
+    }
 /*上传文件*/
     public void uploadImageData(String fileName){
         if (lod == null)
@@ -313,18 +370,42 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
 
 
         OkHttpClient client = new OkHttpClient();
-        FormBody formBody = new FormBody.Builder()
-                .add("uid",""+ AccountManager.getInstance().getUid())
-                .add("token", AccountManager.getInstance().getToken())
-                .add("ext", "jpg")
-                .add("file", "1000")
 
-                .build();
+
+        MultipartBody.Builder multiBuilder=new MultipartBody.Builder();
+        File file=new File(fileName);
+        MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        RequestBody filebody = MultipartBody.create(MEDIA_TYPE_PNG, file);
+
+        // 设置请求体
+        multiBuilder.setType(MultipartBody.FORM);
+//这里是 封装上传图片参数
+
+        multiBuilder.addFormDataPart("file", file.getName(), filebody);
+        // 封装请求参数,这里最重要
+        HashMap<String, String> params = new HashMap<>();
+        params.put("uid",""+ AccountManager.getInstance().getUid());
+        params.put("token",AccountManager.getInstance().getToken());
+        params.put("ext","jpg");
+
+        //参数以添加header方式将参数封装，否则上传参数为空
+        if (params != null && !params.isEmpty()) {
+            for (String key : params.keySet()) {
+                multiBuilder.addPart(
+                        Headers.of("Content-Disposition", "form-data; name=\"" + key + "\""),
+                        RequestBody.create(null, params.get(key)));
+            }
+        }
+
+
+
+
+        RequestBody multiBody=multiBuilder.build();
 
 
         final Request request = new Request.Builder()
                 .url(Config.gblUrl+"upload.php")
-                .post(formBody)
+                .post(multiBody)
                 .build();
 
         Call call = client.newCall(request);
@@ -349,9 +430,8 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
                         lod.dismiss();
                         if (model != null && model.error_code==0){
                             String body = new Gson().toJson(model.data);
-                            List<LineModel> lists = GsonUtil.parseJsonArrayWithGson(body, LineModel[].class);
-
-
+                            UploadFileRetModel retModel = new Gson().fromJson(body,UploadFileRetModel.class);
+                            finishUploadImage(retModel.getUrl());
                         }
                         else{
                             Toast.makeText(UploadPatroActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_LONG).show();
@@ -364,7 +444,54 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
 
     /*上传文件之后，提交结果*/
     public void finishUploadImage(String fileName){
+        OkHttpClient client = new OkHttpClient();
+        FormBody formBody = new FormBody.Builder()
+                .add("pid", ""+model.getId())
+                .add("token", AccountManager.getInstance().getToken())
+                .add("uid", ""+AccountManager.getInstance().getUid())
+                .add("nme", "大号侧")
+                .add("img", fileName)
+                .build();
 
+
+
+
+        MediaType mediaType = MediaType.parse("application/data");
+        final Request request = new Request.Builder()
+                .url(Config.workUrl+"pic_add.php")
+                .post(formBody)
+                .build();
+
+        Call call = client.newCall(request);
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                lod.dismiss();
+                Toast.makeText(UploadPatroActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String res = response.body().string();
+                Log.e(tag,"res is "+res);
+                final ResponseModel model  = GsonUtil.parseJsonWithGson(res,ResponseModel.class);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //
+                        lod.dismiss();
+                        if (model != null && model.error_code==0){
+                            Toast.makeText(UploadPatroActivity.this, getString(R.string.string_upload_img_success), Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Toast.makeText(UploadPatroActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+        });
     }
 
     LoadingDialog lod;

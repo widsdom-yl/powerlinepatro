@@ -59,4 +59,5 @@
     <string name="error_login_failed">登录失败，请检查用户名和密码</string>
     <string name="login_success">登录成功</string>
     <string name="error_request_failed">请求失败</string>
+    <string name="string_upload_img_success">上传图片成功</string>
 </resources>

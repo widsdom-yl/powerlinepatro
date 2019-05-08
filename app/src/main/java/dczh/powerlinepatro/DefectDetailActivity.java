@@ -1,6 +1,5 @@
 package dczh.powerlinepatro;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,9 +11,9 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
-import dczh.Util.MathUtil;
 import dczh.adapter.TowerAccountAdapter;
 import dczh.adapter.TowerPartoImageAdapter;
+import dczh.model.PatrolImageModel;
 import dczh.model.TowerAccountItemModel;
 import dczh.model.TowerDefectModel;
 
@@ -27,7 +26,7 @@ public class DefectDetailActivity extends BaseAppCompatActivity {
     TowerPartoImageAdapter mPatroAdapter;
     private static final String ARG_PARAM1 = "param1";
 
-    List<Integer> colorList = new ArrayList<>();
+    List<PatrolImageModel> mLists = new ArrayList<>();
     List<TowerAccountItemModel> list = new ArrayList<TowerAccountItemModel>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,11 +59,8 @@ public class DefectDetailActivity extends BaseAppCompatActivity {
         mAapter = new TowerAccountAdapter(list);
         mRecyclerView_item.setAdapter(mAapter);
 
-        for (int i = 0;i<6;i++){
-            int color =  Color.rgb((int) MathUtil.nextDouble(0,255), (int)MathUtil.nextDouble(0,255), (int)MathUtil.nextDouble(0,255));
-            colorList.add(color);
-        }
-        mPatroAdapter = new TowerPartoImageAdapter(colorList);
+
+        mPatroAdapter = new TowerPartoImageAdapter(mLists);
         mRecyclerView_image.setAdapter(mPatroAdapter);
 
 

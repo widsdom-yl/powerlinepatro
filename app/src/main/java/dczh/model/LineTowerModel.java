@@ -58,6 +58,15 @@ public class LineTowerModel implements Serializable {
     String tpe;//类型
     String lot;//
     String lat;//
+//      "gttx": "123", //杆塔塔形
+//              "gtgd": "123", //杆塔高度
+//              "dhdj": "123", //大号侧方向档距
+//              "ljdj": "123", //累加档距
+    String gttx;//杆塔塔形
+    String gtgd;//杆塔高度
+    String dhdj;//大号侧方向档距
+    String ljdj;//累加档距
+
 
 
 

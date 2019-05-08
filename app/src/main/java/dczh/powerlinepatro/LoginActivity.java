@@ -42,7 +42,7 @@ import okhttp3.Response;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     String[] permissions = new String[]{
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-           Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
 //            Manifest.permission.RECORD_AUDIO,
 //            Manifest.permission.MODIFY_AUDIO_SETTINGS,
 //            Manifest.permission.ACCESS_WIFI_STATE,
@@ -277,7 +277,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         if (isDenied)
         {
-//            Toast.makeText(this, getString(R.string.string_openPermission), Toast.LENGTH_SHORT).show();
+             //  Toast.makeText(this, getString(R.string.string_openPermission), Toast.LENGTH_SHORT).show();
         }
         else
         {
