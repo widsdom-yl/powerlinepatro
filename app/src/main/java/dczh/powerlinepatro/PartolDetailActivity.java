@@ -14,8 +14,9 @@ import java.util.List;
 import dczh.adapter.TowerAccountAdapter;
 import dczh.adapter.TowerPartoImageAdapter;
 import dczh.model.LineTowerModel;
-import dczh.model.PatrolImageModel;
 import dczh.model.TowerAccountItemModel;
+import dczh.model.UploadFileRetModel;
+
 //巡视详情
 public class PartolDetailActivity extends BaseAppCompatActivity {
     RecyclerView mRecyclerView_item;
@@ -25,7 +26,7 @@ public class PartolDetailActivity extends BaseAppCompatActivity {
     TowerPartoImageAdapter mPatroAdapter;
     private static final String ARG_PARAM1 = "param1";
 
-    List<PatrolImageModel> mLists = new ArrayList<>();
+    List<UploadFileRetModel> mLists = new ArrayList<>();
     List<TowerAccountItemModel> list = new ArrayList<TowerAccountItemModel>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -28,11 +28,11 @@ public class PatrolImageModel {
         this.nme = nme;
     }
 
-    public String getImg() {
+    public Object getImg() {
         return img;
     }
 
-    public void setImg(String img) {
+    public void setImg(Object img) {
         this.img = img;
     }
 
@@ -45,6 +45,6 @@ public class PatrolImageModel {
     }
 
     String nme;
-    String img;
+    Object img;
     String dte;
 }

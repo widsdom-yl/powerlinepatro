@@ -141,12 +141,30 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         return super.onOptionsItemSelected(item);
     }
 
+    int patrolImageCount = 0 ;
+    int uploadedCount = 0;
+    List<String> compressFiles = new ArrayList<>();
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.button_sign_parto){
             if (mFileArray.size()>1){
-                //uploadImageData(mFileArray.get(0));
-                compressPhoto(mFileArray.get(0));
+                if (lod == null)
+                {
+                    lod = new LoadingDialog(this);
+                }
+                lod.dialogShow();
+                if (mFileArray.get(mFileArray.size()-1).length()>0){
+                    patrolImageCount = mFileArray.size();
+                }
+                else{
+                    patrolImageCount = mFileArray.size()-1;
+                }
+                uploadedCount=0;
+                compressFiles.clear();
+                for (String fileName : mFileArray){
+                    compressPhoto(fileName);
+                }
+
             }
         }
 
@@ -318,7 +336,10 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         mAdpter.notifyDataSetChanged();
 
     }
-    public void compressPhoto(String fileName){
+    public void compressPhoto(final String fileName){
+        if (fileName.length()  == 0){
+            return;
+        }
         File fileDir = new File(Environment.getExternalStorageDirectory().getPath() + File.separator + "photoTest" + File.separator);
         if (!fileDir.exists()) {
             fileDir.mkdirs();
@@ -350,7 +371,11 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
                     public void onSuccess(File file) {
                         // TODO 压缩成功后调用，返回压缩后的图片文件
                         Log.e(tag,"onSuccess");
-                        uploadImageData(file.getAbsolutePath());
+                        //uploadImageData(file.getAbsolutePath());
+                        compressFiles.add(file.getAbsolutePath());
+                        if (compressFiles.size() == patrolImageCount){
+                            uploadImageData(compressFiles);
+                        }
                     }
 
                     @Override
@@ -361,27 +386,29 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
                 }).launch();
     }
 /*上传文件*/
-    public void uploadImageData(String fileName){
-        if (lod == null)
-        {
-            lod = new LoadingDialog(this);
-        }
-        lod.dialogShow();
+    public void uploadImageData(List<String> compressFiles){
+
 
 
         OkHttpClient client = new OkHttpClient();
 
 
         MultipartBody.Builder multiBuilder=new MultipartBody.Builder();
-        File file=new File(fileName);
+
+
         MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
-        RequestBody filebody = MultipartBody.create(MEDIA_TYPE_PNG, file);
+
 
         // 设置请求体
         multiBuilder.setType(MultipartBody.FORM);
 //这里是 封装上传图片参数
 
-        multiBuilder.addFormDataPart("file", file.getName(), filebody);
+        for (int i = 0;i<compressFiles.size();++i){
+            File file=new File(compressFiles.get(i));
+            RequestBody filebody = MultipartBody.create(MEDIA_TYPE_PNG, file);
+            multiBuilder.addFormDataPart("file"+(i+1), file.getName(), filebody);
+        }
+
         // 封装请求参数,这里最重要
         HashMap<String, String> params = new HashMap<>();
         params.put("uid",""+ AccountManager.getInstance().getUid());
@@ -404,7 +431,7 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
 
 
         final Request request = new Request.Builder()
-                .url(Config.gblUrl+"upload.php")
+                .url(Config.gblUrl+"upload6.php")
                 .post(multiBody)
                 .build();
 
@@ -420,18 +447,19 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String res = response.body().string();
-                Log.e(tag,"res is "+res);
+                Log.e(tag,"upload res is "+res);
                 final ResponseModel model  = GsonUtil.parseJsonWithGson(res,ResponseModel.class);
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         //
-                        lod.dismiss();
+
                         if (model != null && model.error_code==0){
                             String body = new Gson().toJson(model.data);
-                            UploadFileRetModel retModel = new Gson().fromJson(body,UploadFileRetModel.class);
-                            finishUploadImage(retModel.getUrl());
+                            UploadFileRetModel model = GsonUtil.parseJsonWithGson(body, UploadFileRetModel.class);
+//
+                            finishUploadImage(model);
                         }
                         else{
                             Toast.makeText(UploadPatroActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_LONG).show();
@@ -443,14 +471,16 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
     }
 
     /*上传文件之后，提交结果*/
-    public void finishUploadImage(String fileName){
+    public void finishUploadImage(UploadFileRetModel  retModel){
         OkHttpClient client = new OkHttpClient();
+
+
         FormBody formBody = new FormBody.Builder()
                 .add("pid", ""+model.getId())
                 .add("token", AccountManager.getInstance().getToken())
                 .add("uid", ""+AccountManager.getInstance().getUid())
-                .add("nme", "大号侧")
-                .add("img", fileName)
+                .add("nme", "11")
+                .add("img", retModel.getUrl())
                 .build();
 
 
@@ -481,12 +511,17 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
                     @Override
                     public void run() {
                         //
-                        lod.dismiss();
+
+
                         if (model != null && model.error_code==0){
                             Toast.makeText(UploadPatroActivity.this, getString(R.string.string_upload_img_success), Toast.LENGTH_LONG).show();
+                            ;
+
+                            lod.dismiss();
                         }
                         else{
                             Toast.makeText(UploadPatroActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_LONG).show();
+                            lod.dismiss();
                         }
                     }
                 });

@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dczh.Manager.AccountManager;
 import dczh.Util.Config;
 import dczh.Util.GsonUtil;
 import dczh.View.LoadingDialog;
@@ -32,6 +31,7 @@ import dczh.model.LineTowerModel;
 import dczh.model.PatrolImageModel;
 import dczh.model.ResponseModel;
 import dczh.model.TowerAccountItemModel;
+import dczh.model.UploadFileRetModel;
 import dczh.powerlinepatro.R;
 import dczh.powerlinepatro.UploadDefectActivity;
 import dczh.powerlinepatro.UploadPatroActivity;
@@ -61,7 +61,7 @@ public class TowerAccountFragment extends Fragment implements View.OnClickListen
 
     TowerAccountAdapter mAapter;
     TowerPartoImageAdapter mPatroAdapter;
-    List<PatrolImageModel>mList = new ArrayList<>();
+    List<UploadFileRetModel>mList = new ArrayList<>();
     List<TowerAccountItemModel> list = new ArrayList<TowerAccountItemModel>();
     public TowerAccountFragment() {
         // TowerAccountFragment empty public constructor
@@ -186,8 +186,10 @@ public class TowerAccountFragment extends Fragment implements View.OnClickListen
 
         OkHttpClient client = new OkHttpClient();
         FormBody formBody = new FormBody.Builder()
-                .add("aid", ""+ AccountManager.getInstance().getUid())
-                .add("pid", ""+model.getId())
+                .add("aid", "0")
+                .add("pid", ""+model.getId()
+                )
+                .add("cnt","1")
                 .build();
 
 
@@ -222,9 +224,14 @@ public class TowerAccountFragment extends Fragment implements View.OnClickListen
                         if (model != null && model.error_code==0){
                             String body = new Gson().toJson(model.data);
                             List<PatrolImageModel> lists = GsonUtil.parseJsonArrayWithGson(body, PatrolImageModel[].class);
-                            mList=lists;
-                            mPatroAdapter.resetMList(mList);
-                            mPatroAdapter.notifyDataSetChanged();
+                            if (lists.size()>0){
+                                String body1 = new Gson().toJson(lists.get(0).getImg());
+                                List<UploadFileRetModel> mUrls  = GsonUtil.parseJsonArrayWithGson(body1, UploadFileRetModel[].class);
+
+                                mPatroAdapter.resetMList(mUrls);
+                                mPatroAdapter.notifyDataSetChanged();
+                            }
+
                         }
                         else{
                             Toast.makeText(TowerAccountFragment.this.getContext(), getString(R.string.error_request_failed), Toast.LENGTH_LONG).show();

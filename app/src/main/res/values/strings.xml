@@ -60,4 +60,6 @@
     <string name="login_success">登录成功</string>
     <string name="error_request_failed">请求失败</string>
     <string name="string_upload_img_success">上传图片成功</string>
+    <string name="string_upload_file1">已上传第</string>
+    <string name="string_upload_file2">张图片</string>
 </resources>
