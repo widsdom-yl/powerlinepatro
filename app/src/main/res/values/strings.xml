@@ -64,4 +64,6 @@
     <string name="string_upload_file2">张图片</string>
     <string name="string_gaode">高德地图</string>
     <string name="string_baidu">百度地图</string>
+    <string name="string_uploadsuccess">上传成功！</string>
+    <string name="string_uploadfailed">上传失败！</string>
 </resources>
