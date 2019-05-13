@@ -125,6 +125,12 @@ public class TowerAccountFragment extends Fragment implements View.OnClickListen
 //                    + " must implement OnFragmentInteractionListener");
 //        }
     }
+    @Override
+    public void onResume(){
+        super.onResume();
+        requestLineTowerPartolImageArray();
+
+    }
 
     @Override
     public void onDetach() {
@@ -171,7 +177,7 @@ public class TowerAccountFragment extends Fragment implements View.OnClickListen
         mPatroAdapter = new TowerPartoImageAdapter(mList);
         mRecyclerView_image.setAdapter(mPatroAdapter);
 
-        requestLineTowerPartolImageArray();
+
 
     }
 //获取杆塔巡视图片

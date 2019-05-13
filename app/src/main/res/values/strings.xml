@@ -62,4 +62,6 @@
     <string name="string_upload_img_success">上传图片成功</string>
     <string name="string_upload_file1">已上传第</string>
     <string name="string_upload_file2">张图片</string>
+    <string name="string_gaode">高德地图</string>
+    <string name="string_baidu">百度地图</string>
 </resources>

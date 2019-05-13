@@ -39,25 +39,25 @@ public class LineTowerModel implements Serializable {
         this.tpe = tpe;
     }
 
-    public String getLot() {
+    public double getLot() {
         return lot;
     }
 
-    public void setLot(String lot) {
+    public void setLot(double lot) {
         this.lot = lot;
     }
 
-    public String getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public void setLat(String lat) {
+    public void setLat(double lat) {
         this.lat = lat;
     }
 
     String tpe;//类型
-    String lot;//
-    String lat;//
+    double lot;//
+    double lat;//
 //      "gttx": "123", //杆塔塔形
 //              "gtgd": "123", //杆塔高度
 //              "dhdj": "123", //大号侧方向档距

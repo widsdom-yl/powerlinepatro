@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -18,11 +19,16 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import dczh.Util.MapUtil;
+import dczh.View.ActionSheet;
+import dczh.model.LineTowerModel;
 import dczh.powerlinepatro.R;
 
 /**
@@ -47,6 +53,7 @@ public class MapFragment extends Fragment implements AMap.OnMyLocationChangeList
     //声明mlocationClient对象
     public AMapLocationClient mlocationClient;
     AMap aMap;
+    private LineTowerModel model;
     private OnFragmentInteractionListener mListener;
     //声明mLocationOption对象
     public AMapLocationClientOption mLocationOption = null;
@@ -64,10 +71,10 @@ public class MapFragment extends Fragment implements AMap.OnMyLocationChangeList
      * @return A new instance of fragment MapFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MapFragment newInstance(String param1, String param2) {
+    public static MapFragment newInstance(LineTowerModel param1, String param2) {
         MapFragment fragment = new MapFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putSerializable(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -77,7 +84,7 @@ public class MapFragment extends Fragment implements AMap.OnMyLocationChangeList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            model = (LineTowerModel)getArguments().getSerializable(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -103,9 +110,9 @@ public class MapFragment extends Fragment implements AMap.OnMyLocationChangeList
         aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
         aMap.getUiSettings().setMyLocationButtonEnabled(true);
 //aMap.getUiSettings().setMyLocationButtonEnabled(true);设置默认定位按钮是否显示，非必需设置。
-        aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false
+//        aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false
 
-        aMap.setOnMyLocationChangeListener(this);
+//        aMap.setOnMyLocationChangeListener(this);
 
 
 
@@ -125,7 +132,16 @@ public class MapFragment extends Fragment implements AMap.OnMyLocationChangeList
 // 在定位结束后，在合适的生命周期调用onDestroy()方法
 // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
 //启动定位
-        mlocationClient.startLocation();
+//        mlocationClient.startLocation();
+
+
+
+        LatLng latLng = new LatLng(model.getLat(),model.getLot());
+        aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,16));
+
+        final Marker marker = aMap.addMarker(new MarkerOptions().position(latLng).title(model.getNme()).snippet(model.getTpe()));
+        aMap.setOnMarkerClickListener(markerClickListener);
+        aMap.setOnInfoWindowClickListener(infoWindowClickListener);
 
 
 
@@ -134,6 +150,32 @@ public class MapFragment extends Fragment implements AMap.OnMyLocationChangeList
 
 
     }
+    AMap.OnInfoWindowClickListener infoWindowClickListener = new AMap.OnInfoWindowClickListener() {
+
+        @Override
+        public void onInfoWindowClick(Marker arg0) {
+            Log.e(tag,"InfoWindow clicked");
+            showSheet();
+        }
+    };
+
+    // 定义 Marker 点击事件监听
+    AMap.OnMarkerClickListener markerClickListener = new AMap.OnMarkerClickListener() {
+        // marker 对象被点击时回调的接口
+        // 返回 true 则表示接口已响应事件，否则返回false
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+            Log.e(tag,"mark clicked");
+            if (marker.isInfoWindowShown()){
+                marker.hideInfoWindow();
+            }
+            else{
+                marker.showInfoWindow();
+            }
+
+            return true;
+        }
+    };
 
 
 
@@ -164,7 +206,11 @@ public class MapFragment extends Fragment implements AMap.OnMyLocationChangeList
         mMapView.onPause();
     }
 
-
+    @Override
+    public void onResume(){
+        super.onResume();
+        mMapView.onResume();
+    }
 
     @Override
     public void onDetach() {
@@ -205,6 +251,60 @@ public class MapFragment extends Fragment implements AMap.OnMyLocationChangeList
     }
 
 
+    private void showSheet() {
+        boolean isGdMapInstalled = MapUtil.isGdMapInstalled();
+        boolean isBdMapInstalled = MapUtil.isBaiduMapInstalled();
+        if (isGdMapInstalled  || isBdMapInstalled){
+
+            View.OnClickListener  clickListener_gd = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    actionSheet.dismiss();
+                    MapUtil.openGaoDeNavi(MapFragment.this.getContext(), 0, 0, null, model.getLat(), model.getLot(), model.getNme());
+
+                }
+            };
+            View.OnClickListener  clickListener_bd = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    actionSheet.dismiss();
+                    MapUtil.openBaiDuNavi(MapFragment.this.getContext(), 0, 0, null, model.getLat(), model.getLot(), model.getNme());
+
+                }
+            };
+            View.OnClickListener  clickListener_cancel = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    actionSheet.dismiss();
+                }
+            };
+            if (isGdMapInstalled && isBdMapInstalled){
+                actionSheet=new ActionSheet.DialogBuilder(this.getContext())
+                        .addSheet(getString(R.string.string_gaode), clickListener_gd)
+                        .addSheet(getString(R.string.string_baidu), clickListener_bd)
+                        .addCancelListener(clickListener_cancel)
+                        .create();
+            }
+            else if(isGdMapInstalled){
+                actionSheet=new ActionSheet.DialogBuilder(this.getContext())
+                        .addSheet(getString(R.string.string_gaode), clickListener_gd)
+                        .addCancelListener(clickListener_cancel)
+                        .create();
+            }
+            else{
+                actionSheet=new ActionSheet.DialogBuilder(this.getContext())
+                        .addSheet(getString(R.string.string_baidu), clickListener_bd)
+                        .addCancelListener(clickListener_cancel)
+                        .create();
+            }
+
+        }
+        else{
+            Toast.makeText(this.getContext(), getString(R.string.string_upload_img_success), Toast.LENGTH_LONG).show();
+        }
+
+    }
+    private ActionSheet actionSheet;
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -219,4 +319,5 @@ public class MapFragment extends Fragment implements AMap.OnMyLocationChangeList
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+    static  final String tag = "MapFragment";
 }
