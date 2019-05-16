@@ -8,11 +8,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import dczh.Util.GsonUtil;
 import dczh.adapter.TowerAccountAdapter;
 import dczh.adapter.TowerPartoImageAdapter;
+import dczh.model.LineTowerModel;
 import dczh.model.TowerAccountItemModel;
 import dczh.model.TowerDefectModel;
 import dczh.model.UploadFileRetModel;
@@ -21,11 +25,12 @@ public class DefectDetailActivity extends BaseAppCompatActivity {
 
     RecyclerView mRecyclerView_item;
     RecyclerView mRecyclerView_image;
-    TowerDefectModel model;
+    TowerDefectModel mDefectModel;
+    LineTowerModel mLineTowerModel;
     TowerAccountAdapter mAapter;
     TowerPartoImageAdapter mPatroAdapter;
     private static final String ARG_PARAM1 = "param1";
-
+    private static final String ARG_PARAM2 = "param2";
     List<UploadFileRetModel> mLists = new ArrayList<>();
     List<TowerAccountItemModel> list = new ArrayList<TowerAccountItemModel>();
     @Override
@@ -37,8 +42,12 @@ public class DefectDetailActivity extends BaseAppCompatActivity {
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null && actionBar != null)
         {
-            model = (TowerDefectModel)bundle.getSerializable(ARG_PARAM1);
-            setCustomTitle(model.getTower(), true);
+            mDefectModel = (TowerDefectModel)bundle.getSerializable(ARG_PARAM1);
+            mLineTowerModel = (LineTowerModel)bundle.getSerializable(ARG_PARAM2);
+            String body1 = new Gson().toJson(mDefectModel.getImg());
+            List<UploadFileRetModel> mUrls  = GsonUtil.parseJsonArrayWithGson(body1, UploadFileRetModel[].class);
+            mLists = mUrls;
+            setCustomTitle(mLineTowerModel.getNme(), true);
         }
 
         mRecyclerView_item = findViewById(R.id.recyler_tower_patrol);
@@ -48,13 +57,18 @@ public class DefectDetailActivity extends BaseAppCompatActivity {
         GridLayoutManager layoutManage = new GridLayoutManager(this, 3);
         mRecyclerView_image.setLayoutManager(layoutManage);
 
-        TowerAccountItemModel model1 = new TowerAccountItemModel(getString(R.string.string_upload_time),"2019-4-18");
-        TowerAccountItemModel model2 = new TowerAccountItemModel(getString(R.string.string_defect_status),getString(R.string.string_handle));
-        TowerAccountItemModel model3 = new TowerAccountItemModel(getString(R.string.string_upload_worker),"张三");
+        if (mDefectModel != null){
+            TowerAccountItemModel model1 = new TowerAccountItemModel(getString(R.string.string_upload_time),mDefectModel.getDte());
+            TowerAccountItemModel model2 = new TowerAccountItemModel(getString(R.string.string_defect_status),mDefectModel.getStausDesc());
+            TowerAccountItemModel model3 = new TowerAccountItemModel(getString(R.string.string_upload_worker),mDefectModel.getUsr());
+            TowerAccountItemModel model4 = new TowerAccountItemModel(getString(R.string.string_defect_info),mDefectModel.getNme());
 
-        list.add(model1);
-        list.add(model2);
-        list.add(model3);
+            list.add(model1);
+            list.add(model2);
+            list.add(model3);
+            list.add(model4);
+        }
+
 
         mAapter = new TowerAccountAdapter(list);
         mRecyclerView_item.setAdapter(mAapter);

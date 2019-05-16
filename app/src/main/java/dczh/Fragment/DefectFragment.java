@@ -8,19 +8,35 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import dczh.Util.Config;
+import dczh.Util.GsonUtil;
+import dczh.View.LoadingDialog;
 import dczh.adapter.BaseAdapter;
 import dczh.adapter.DefectAdapter;
 import dczh.model.LineTowerModel;
+import dczh.model.ResponseModel;
 import dczh.model.TowerDefectModel;
 import dczh.powerlinepatro.DefectDetailActivity;
 import dczh.powerlinepatro.R;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class DefectFragment extends Fragment implements BaseAdapter.OnItemClickListener {
@@ -40,7 +56,7 @@ public class DefectFragment extends Fragment implements BaseAdapter.OnItemClickL
 
     RecyclerView mRecyclerView;
     DefectAdapter mAapter;
-    List<TowerDefectModel> list = new ArrayList<TowerDefectModel>();
+    List<TowerDefectModel> mList = new ArrayList<TowerDefectModel>();
     private LineTowerModel model;
 
     public DefectFragment() {
@@ -90,12 +106,9 @@ public class DefectFragment extends Fragment implements BaseAdapter.OnItemClickL
         initValue();
     }
     void initValue(){
-        for (int i=0;i<5;++i){
-            TowerDefectModel model = new TowerDefectModel("线路杆塔","2019-4-13 12:50","张三"+i,true);
-            list.add(model);
-        }
 
-        mAapter = new DefectAdapter(list);
+
+        mAapter = new DefectAdapter(mList);
 
         mRecyclerView.setAdapter(mAapter);
         mAapter.setOnItemClickListener(this);
@@ -106,7 +119,7 @@ public class DefectFragment extends Fragment implements BaseAdapter.OnItemClickL
     @Override
     public void onResume() {
         super.onResume();
-
+        requestTowerDefectArray();
         // Refresh the state of the +1 button each time the activity receives focus.
 
     }
@@ -139,7 +152,8 @@ public class DefectFragment extends Fragment implements BaseAdapter.OnItemClickL
     public void onItemClick(View view, int position) {
         Intent intent = new Intent(this.getContext(), DefectDetailActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(ARG_PARAM1,list.get(position));
+        bundle.putSerializable(ARG_PARAM1,mList.get(position));
+        bundle.putSerializable(ARG_PARAM2,model);
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -163,5 +177,74 @@ public class DefectFragment extends Fragment implements BaseAdapter.OnItemClickL
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+    public void requestTowerDefectArray() {
+
+        if (lod == null)
+        {
+            lod = new LoadingDialog(this.getContext());
+        }
+        lod.dialogShow();
+
+
+        OkHttpClient client = new OkHttpClient();
+        FormBody formBody = new FormBody.Builder()
+                .add("pid", ""+model.getId())
+                .add("aid", "0")
+                .add("cnt", "100")
+                .build();
+
+
+
+
+        MediaType mediaType = MediaType.parse("application/data");
+        final Request request = new Request.Builder()
+                .url(Config.workUrl+"pie_get.php")
+                .post(formBody)
+                .build();
+
+        Call call = client.newCall(request);
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                lod.dismiss();
+                Toast.makeText(DefectFragment.this.getContext(), getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String res = response.body().string();
+                Log.e(tag,"res is "+res);
+                final ResponseModel model  = GsonUtil.parseJsonWithGson(res,ResponseModel.class);
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //
+                        lod.dismiss();
+                        if (model != null && model.error_code==0){
+                            String body = new Gson().toJson(model.data);
+                            List<TowerDefectModel> lists = GsonUtil.parseJsonArrayWithGson(body, TowerDefectModel[].class);
+                            mList = lists;
+                            mAapter.resetMList(mList);
+                            mAapter.notifyDataSetChanged();
+                        }
+                        else{
+                            Toast.makeText(DefectFragment.this.getContext(), getString(R.string.error_request_failed), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+        });
+
+
+
+
+    }
+
+    LoadingDialog lod;
+    static  final String tag = "DefectFragment";
+
+
 
 }

@@ -24,9 +24,9 @@ public class DefectAdapter extends BaseAdapter<TowerDefectModel>
         TextView timeTv = holder.getView(R.id.text_tower_defect_time);
         TextView workerTv = holder.getView(R.id.text_tower_defect_worker);
         TextView statusTv = holder.getView(R.id.text_tower_defect_status);
-        titleTv.setText(model.getTower());
-        timeTv.setText(MyApplication.getInstance().getString(R.string.string_tower_defect_upload_time)+model.getTowerDefectTime());
-        workerTv.setText(MyApplication.getInstance().getString(R.string.string_tower_defect_upload_worker)+model.getTowerDefectWorker());
+        titleTv.setText(model.getNme());
+        timeTv.setText(MyApplication.getInstance().getString(R.string.string_tower_defect_upload_time)+model.getDte());
+        workerTv.setText(MyApplication.getInstance().getString(R.string.string_tower_defect_upload_worker)+model.getUsr());
         statusTv.setText(model.getStausDesc());
 
 

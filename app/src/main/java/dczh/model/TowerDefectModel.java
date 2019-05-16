@@ -6,37 +6,57 @@ import dczh.MyApplication;
 import dczh.powerlinepatro.R;
 
 public class TowerDefectModel implements Serializable {
-    String tower;
+    int pid;
+    int id;
+    String nme;
+    String usr;
 
-    public TowerDefectModel(String tower, String towerDefectTime, String towerDefectWorker, boolean status) {
-        this.tower = tower;
-        this.towerDefectTime = towerDefectTime;
-        this.towerDefectWorker = towerDefectWorker;
-        this.status = status;
+    public int getPid() {
+        return pid;
     }
 
-    public String getTower() {
-        return tower;
+    public void setPid(int pid) {
+        this.pid = pid;
     }
 
-    public void setTower(String tower) {
-        this.tower = tower;
+    public int getId() {
+        return id;
     }
 
-    public String getTowerDefectTime() {
-        return towerDefectTime;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setTowerDefectTime(String towerDefectTime) {
-        this.towerDefectTime = towerDefectTime;
+    public String getNme() {
+        return nme;
     }
 
-    public String getTowerDefectWorker() {
-        return towerDefectWorker;
+    public void setNme(String nme) {
+        this.nme = nme;
     }
 
-    public void setTowerDefectWorker(String towerDefectWorker) {
-        this.towerDefectWorker = towerDefectWorker;
+    public String getUsr() {
+        return usr;
+    }
+
+    public void setUsr(String usr) {
+        this.usr = usr;
+    }
+
+    public Object getImg() {
+        return img;
+    }
+
+    public void setImg(Object img) {
+        this.img = img;
+    }
+
+    public String getDte() {
+        return dte;
+    }
+
+    public void setDte(String dte) {
+        this.dte = dte;
     }
 
     public boolean isStatus() {
@@ -46,6 +66,19 @@ public class TowerDefectModel implements Serializable {
     public void setStatus(boolean status) {
         this.status = status;
     }
+
+    Object img;
+    String dte;
+
+    /*
+    *   "pid": 1000000,
+            "id": 1,
+            "nme": "缺陷内容",
+            "img": "http://gz.aliyuns.vip/uld/usr/20190404/20190404202534716_1000000001.jpg",
+            "dte": "2019-04-04 12:12:12"
+            */
+
+
     public String getStausDesc() {
         if (status){
             return MyApplication.getInstance().getString(R.string.string_tower_defect_status_handled);
@@ -56,7 +89,6 @@ public class TowerDefectModel implements Serializable {
         }
     }
 
-    String towerDefectTime;
-    String towerDefectWorker;
+
     boolean status;
 }

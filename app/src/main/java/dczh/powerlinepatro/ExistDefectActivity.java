@@ -51,10 +51,7 @@ public class ExistDefectActivity extends BaseAppCompatActivity implements BaseAd
         return super.onOptionsItemSelected(item);
     }
     void initValue(){
-        for (int i=0;i<15;++i){
-            TowerDefectModel model = new TowerDefectModel("线路杆塔","2019-4-13 12:50","张三"+i,true);
-            list.add(model);
-        }
+
 
         mAapter = new DefectAdapter(list);
 
