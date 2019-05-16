@@ -295,7 +295,7 @@ public class TowerAccountFragment extends Fragment implements View.OnClickListen
             Bundle bundle = new Bundle();
             bundle.putSerializable(ARG_PARAM1,model);
             intent.putExtras(bundle);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE_1);
         }
     }
 

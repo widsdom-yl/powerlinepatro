@@ -20,7 +20,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-
         android:id="@+id/button_upload_defect"
         android:layout_width="175dp"
         android:layout_height="54dp"

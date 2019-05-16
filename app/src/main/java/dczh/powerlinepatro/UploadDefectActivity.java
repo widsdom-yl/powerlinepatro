@@ -14,27 +14,54 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.zhy.base.fileprovider.FileProvider7;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
+import dczh.Manager.AccountManager;
+import dczh.Util.Config;
 import dczh.Util.FileUtil;
+import dczh.Util.GsonUtil;
 import dczh.View.ActionSheet;
+import dczh.View.LoadingDialog;
 import dczh.adapter.BaseAdapter;
 import dczh.adapter.TowerProtolEditImageAdapter;
 import dczh.model.LineTowerModel;
+import dczh.model.ResponseModel;
+import dczh.model.UploadFileRetModel;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import top.zibin.luban.CompressionPredicate;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
-public class UploadDefectActivity extends BaseAppCompatActivity implements View.OnClickListener, BaseAdapter.OnItemClickListener, TowerProtolEditImageAdapter.DeleteClickListener {
+public class UploadDefectActivity extends BaseAppCompatActivity implements View.OnClickListener, BaseAdapter.OnItemClickListener, TowerProtolEditImageAdapter.DeleteClickListener, AdapterView.OnItemSelectedListener {
 
     private static final String ARG_PARAM1 = "param1";
     private LineTowerModel model;
@@ -43,7 +70,8 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
     private ArrayAdapter<String> arr_adapter;
     private TowerProtolEditImageAdapter mAdpter;
     private RecyclerView mRecyclerView;
-
+    private EditText mEditDefect;
+    List<LineTowerModel>nearTowerList = new ArrayList<>();
     Button button_choose_image;
     ImageView imageView;
     private ActionSheet actionSheet;
@@ -54,6 +82,8 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
 
     List<String> mFileArray = new ArrayList<>();
     Integer mTakePhotoIndex = 0;
+
+
 
 
     @Override
@@ -73,18 +103,14 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
         }
 
         spinner = findViewById(R.id.spinner);
+        spinner.setOnItemSelectedListener(this);
         //数据
         data_list = new ArrayList<String>();
-        if (model == null){
-            data_list.add(getString(R.string.string_locate_by_hand));
-        }
-        else{
+        if (model != null){
             data_list.add(model.getNme());
         }
 
-        data_list.add("上海");
-        data_list.add("广州");
-        data_list.add("深圳");
+
 
         //适配器
         arr_adapter= new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, data_list);
@@ -99,6 +125,7 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
 //        button_choose_image.setOnClickListener(this);
 
         mRecyclerView = findViewById(R.id.recyler_defect_signin_image);
+        mEditDefect = findViewById(R.id.edit_defect);
         GridLayoutManager layoutManage = new GridLayoutManager(this, 3);
         mRecyclerView.setLayoutManager(layoutManage);
         mAdpter = new TowerProtolEditImageAdapter(mFileArray);
@@ -106,6 +133,8 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
         mFileArray.add("");
         mAdpter.setOnItemClickListener(this);
         mAdpter.setmDeleteClickListener(this);
+        findViewById(R.id.button_sign_defect).setOnClickListener(this);
+        requestLineTowerArray();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -113,21 +142,49 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
         getMenuInflater().inflate(R.menu.blank_menu, menu);
         return true;
     }
+    public static int RESULT_CODE = 1;
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         switch (item.getItemId())
         {
             case android.R.id.home:
+                Intent intent = new Intent();
+                intent.putExtra("model", model);//根据key “text” 把获取OtherActivity中的edittext中的String回传给第一个activity
+                setResult(RESULT_CODE, intent);//回传结果码，我这边也是给1，大于等于0即可，值随意
                 this.finish(); // back button
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    int patrolImageCount = 0 ;
+    int uploadedCount = 0;
+    List<String> compressFiles = new ArrayList<>();
     @Override
     public void onClick(View view) {
-        showSheet();
+        if (view.getId() == R.id.button_sign_defect){
+            if (mFileArray.size()>1){
+                if (lod == null)
+                {
+                    lod = new LoadingDialog(this);
+                }
+                lod.dialogShow();
+                if (mFileArray.get(mFileArray.size()-1).length()>0){
+                    patrolImageCount = mFileArray.size();
+                }
+                else{
+                    patrolImageCount = mFileArray.size()-1;
+                }
+                uploadedCount=0;
+                compressFiles.clear();
+                for (String fileName : mFileArray){
+                    compressPhoto(fileName);
+                }
+
+            }
+        }
+
     }
     private void showSheet() {
         actionSheet=new ActionSheet.DialogBuilder(this)
@@ -294,6 +351,295 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
         mFileArray.remove(position);
         mAdpter.resetMList(mFileArray);
         mAdpter.notifyDataSetChanged();
+
+    }
+
+    public void requestLineTowerArray() {
+
+        if (lod == null)
+        {
+            lod = new LoadingDialog(this);
+        }
+        lod.dialogShow();
+
+
+        OkHttpClient client = new OkHttpClient();
+        FormBody formBody = new FormBody.Builder()
+                .add("lot", ""+model.getLot())
+                .add("lat", ""+model.getLat())
+                .build();
+
+        MediaType mediaType = MediaType.parse("application/data");
+        final Request request = new Request.Builder()
+                .url(Config.workUrl+"tower_near.php")
+                .post(formBody)
+                .build();
+
+        Call call = client.newCall(request);
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                lod.dismiss();
+                Toast.makeText(UploadDefectActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String res = response.body().string();
+                Log.e(tag,"res is "+res);
+                final ResponseModel model  = GsonUtil.parseJsonWithGson(res,ResponseModel.class);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //
+                        lod.dismiss();
+                        if (model != null && model.error_code==0){
+                            String body = new Gson().toJson(model.data);
+                            List<LineTowerModel> lists = GsonUtil.parseJsonArrayWithGson(body, LineTowerModel[].class);
+                            nearTowerList = lists;
+                            for (LineTowerModel model : nearTowerList){
+                                boolean exist = false;
+                                for (Iterator iter = data_list.iterator(); iter.hasNext();) {
+                                    String str = (String)iter.next();
+                                    if (str.equals(model.getNme())){
+                                        exist = true;
+                                        break;
+                                    }
+                                }
+                                if (!exist){
+                                    data_list.add(model.getNme());
+                                }
+                            }
+                            arr_adapter.notifyDataSetChanged();
+
+                        }
+                        else{
+                            Toast.makeText(UploadDefectActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+        });
+
+
+
+
+    }
+
+    public void compressPhoto(final String fileName){
+        if (fileName.length()  == 0){
+            return;
+        }
+        File fileDir = new File(Environment.getExternalStorageDirectory().getPath() + File.separator + "photoTest" + File.separator);
+        if (!fileDir.exists()) {
+            fileDir.mkdirs();
+        }
+
+
+
+        File file=new File(fileName);
+        Luban.with(this)
+                .load(file)
+                .ignoreBy(100)
+                .setTargetDir(fileDir.getAbsolutePath())
+                .filter(new CompressionPredicate() {
+                    @Override
+                    public boolean apply(String path) {
+                        boolean  ret =!(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
+                        return ret;
+                    }
+                })
+                .setCompressListener(new OnCompressListener() {
+                    @Override
+                    public void onStart() {
+                        Log.e(tag,"onStart");
+                        // TODO 压缩开始前调用，可以在方法内启动 loading UI
+
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        // TODO 压缩成功后调用，返回压缩后的图片文件
+                        Log.e(tag,"onSuccess");
+                        //uploadImageData(file.getAbsolutePath());
+                        compressFiles.add(file.getAbsolutePath());
+                        if (compressFiles.size() == patrolImageCount){
+                            uploadImageData(compressFiles);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(tag,"onError"+e.getLocalizedMessage());
+                        // TODO 当压缩过程出现问题时调用
+                    }
+                }).launch();
+    }
+    /*上传文件*/
+    public void uploadImageData(List<String> compressFiles){
+
+
+
+        OkHttpClient client = new OkHttpClient();
+
+
+        MultipartBody.Builder multiBuilder=new MultipartBody.Builder();
+
+
+        MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+
+
+        // 设置请求体
+        multiBuilder.setType(MultipartBody.FORM);
+//这里是 封装上传图片参数
+
+        for (int i = 0;i<compressFiles.size();++i){
+            File file=new File(compressFiles.get(i));
+            RequestBody filebody = MultipartBody.create(MEDIA_TYPE_PNG, file);
+            multiBuilder.addFormDataPart("file"+(i+1), file.getName(), filebody);
+        }
+
+        // 封装请求参数,这里最重要
+        HashMap<String, String> params = new HashMap<>();
+        params.put("uid",""+ AccountManager.getInstance().getUid());
+        params.put("token",AccountManager.getInstance().getToken());
+        params.put("ext","jpg");
+
+        //参数以添加header方式将参数封装，否则上传参数为空
+        if (params != null && !params.isEmpty()) {
+            for (String key : params.keySet()) {
+                multiBuilder.addPart(
+                        Headers.of("Content-Disposition", "form-data; name=\"" + key + "\""),
+                        RequestBody.create(null, params.get(key)));
+            }
+        }
+
+
+
+
+        RequestBody multiBody=multiBuilder.build();
+
+
+        final Request request = new Request.Builder()
+                .url(Config.gblUrl+"upload6.php")
+                .post(multiBody)
+                .build();
+
+        Call call = client.newCall(request);
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                lod.dismiss();
+                Toast.makeText(UploadDefectActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String res = response.body().string();
+                Log.e(tag,"upload res is "+res);
+                final ResponseModel model  = GsonUtil.parseJsonWithGson(res,ResponseModel.class);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //
+
+                        if (model != null && model.error_code==0){
+                            String body = new Gson().toJson(model.data);
+                            UploadFileRetModel model = GsonUtil.parseJsonWithGson(body, UploadFileRetModel.class);
+//
+                            finishUploadImage(model);
+                        }
+                        else{
+                            Toast.makeText(UploadDefectActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /*上传文件之后，提交结果*/
+    public void finishUploadImage(UploadFileRetModel  retModel){
+        OkHttpClient client = new OkHttpClient();
+        String defectInfo =mEditDefect.getText().toString();
+
+        FormBody formBody = new FormBody.Builder()
+                .add("pid", ""+model.getId())
+                .add("token", AccountManager.getInstance().getToken())
+                .add("uid", ""+AccountManager.getInstance().getUid())
+                .add("nme", defectInfo)
+                .add("img", retModel.getUrl())
+                .build();
+
+
+
+
+        MediaType mediaType = MediaType.parse("application/data");
+        final Request request = new Request.Builder()
+                .url(Config.workUrl+"pie_add.php")
+                .post(formBody)
+                .build();
+
+        Call call = client.newCall(request);
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                lod.dismiss();
+                Toast.makeText(UploadDefectActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String res = response.body().string();
+                Log.e(tag,"res is "+res);
+                final ResponseModel model  = GsonUtil.parseJsonWithGson(res,ResponseModel.class);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //
+
+
+                        if (model != null && model.error_code==0){
+                            Toast.makeText(UploadDefectActivity.this, getString(R.string.string_upload_img_success), Toast.LENGTH_LONG).show();
+                            ;
+
+                            lod.dismiss();
+                        }
+                        else{
+                            Toast.makeText(UploadDefectActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_LONG).show();
+                            lod.dismiss();
+                        }
+                    }
+                });
+            }
+        });
+    }
+    LoadingDialog lod;
+    static  final String tag = "UploadDefectActivity";
+
+    public static int REQUEST_CODE_1 = 1;
+    public static int RESULT_CODE_1 = 1;
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        String towername = data_list.get(i);
+        for (Iterator iter =nearTowerList.iterator(); iter.hasNext();) {
+            LineTowerModel tempmodel = (LineTowerModel)iter.next();
+            if (towername.equals(tempmodel.getNme())){
+                model = tempmodel;
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
 }

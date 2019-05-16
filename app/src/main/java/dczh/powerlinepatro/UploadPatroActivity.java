@@ -20,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -71,7 +70,6 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
     private TowerProtolEditImageAdapter mAdpter;
     private RecyclerView mRecyclerView;
 
-    Button button_choose_image;
     ImageView imageView;
     private ActionSheet actionSheet;
     /******************************************/
@@ -124,7 +122,7 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         mFileArray.add("");
         mAdpter.setOnItemClickListener(this);
         mAdpter.setmDeleteClickListener(this);
-        findViewById(R.id.button_sign_parto).setOnClickListener(this);
+        findViewById(R.id.button_sign_defect).setOnClickListener(this);
         requestLineTowerArray();
     }
     @Override
