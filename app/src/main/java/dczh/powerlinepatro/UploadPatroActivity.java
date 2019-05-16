@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -31,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import dczh.Manager.AccountManager;
@@ -59,9 +61,10 @@ import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
 //上传巡视图片
-public class UploadPatroActivity extends BaseAppCompatActivity implements View.OnClickListener, BaseAdapter.OnItemClickListener, TowerProtolEditImageAdapter.DeleteClickListener {
+public class UploadPatroActivity extends BaseAppCompatActivity implements View.OnClickListener, BaseAdapter.OnItemClickListener, TowerProtolEditImageAdapter.DeleteClickListener,AdapterView.OnItemSelectedListener {
     private static final String ARG_PARAM1 = "param1";
     private LineTowerModel model;
+    List<LineTowerModel>nearTowerList = new ArrayList<>();
     private Spinner spinner;
     private List<String> data_list;
     private ArrayAdapter<String> arr_adapter;
@@ -97,14 +100,14 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         //数据
         data_list = new ArrayList<String>();
         data_list.add(model.getNme());
-        data_list.add("上海");
-        data_list.add("广州");
-        data_list.add("深圳");
 
+       // arr_adapter.
         //适配器
         arr_adapter= new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, data_list);
         //设置样式
         arr_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setOnItemSelectedListener(this);
         //加载适配器
         spinner.setAdapter(arr_adapter);
 
@@ -122,6 +125,7 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         mAdpter.setOnItemClickListener(this);
         mAdpter.setmDeleteClickListener(this);
         findViewById(R.id.button_sign_parto).setOnClickListener(this);
+        requestLineTowerArray();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -129,13 +133,18 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         getMenuInflater().inflate(R.menu.blank_menu, menu);
         return true;
     }
+    public static int RESULT_CODE = 1;
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         switch (item.getItemId())
         {
             case android.R.id.home:
-                this.finish(); // back button
+                Intent intent = new Intent();
+                intent.putExtra("model", model);//根据key “text” 把获取OtherActivity中的edittext中的String回传给第一个activity
+                setResult(RESULT_CODE, intent);//回传结果码，我这边也是给1，大于等于0即可，值随意
+                finish();//setResult之后必须调用finish方法
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -236,6 +245,81 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         startActivityForResult(intentToTakePhoto, RC_TAKE_PHOTO);
     }
 
+
+
+    public void requestLineTowerArray() {
+
+        if (lod == null)
+        {
+            lod = new LoadingDialog(this);
+        }
+        lod.dialogShow();
+
+
+        OkHttpClient client = new OkHttpClient();
+        FormBody formBody = new FormBody.Builder()
+                .add("lot", ""+model.getLot())
+                .add("lat", ""+model.getLat())
+                .build();
+
+        MediaType mediaType = MediaType.parse("application/data");
+        final Request request = new Request.Builder()
+                .url(Config.workUrl+"tower_near.php")
+                .post(formBody)
+                .build();
+
+        Call call = client.newCall(request);
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                lod.dismiss();
+                Toast.makeText(UploadPatroActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String res = response.body().string();
+                Log.e(tag,"res is "+res);
+                final ResponseModel model  = GsonUtil.parseJsonWithGson(res,ResponseModel.class);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //
+                        lod.dismiss();
+                        if (model != null && model.error_code==0){
+                            String body = new Gson().toJson(model.data);
+                            List<LineTowerModel> lists = GsonUtil.parseJsonArrayWithGson(body, LineTowerModel[].class);
+                            nearTowerList = lists;
+                            for (LineTowerModel model : nearTowerList){
+                                boolean exist = false;
+                                for (Iterator iter =data_list.iterator(); iter.hasNext();) {
+                                    String str = (String)iter.next();
+                                    if (str.equals(model.getNme())){
+                                        exist = true;
+                                        break;
+                                    }
+                                }
+                                if (!exist){
+                                    data_list.add(model.getNme());
+                                }
+                            }
+                            arr_adapter.notifyDataSetChanged();
+
+                        }
+                        else{
+                            Toast.makeText(UploadPatroActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+        });
+
+
+
+
+    }
 
     /**
      权限申请结果回调
@@ -532,4 +616,25 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
     LoadingDialog lod;
     static  final String tag = "UploadPatroActivity";
 
+    public static int REQUEST_CODE_1 = 1;
+    public static int RESULT_CODE_1 = 1;
+
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        String towername = data_list.get(i);
+        for (Iterator iter =nearTowerList.iterator(); iter.hasNext();) {
+            LineTowerModel tempmodel = (LineTowerModel)iter.next();
+            if (towername.equals(tempmodel.getNme())){
+                model = tempmodel;
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
 }

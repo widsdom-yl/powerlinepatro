@@ -1,5 +1,6 @@
 package dczh.powerlinepatro;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -189,6 +190,19 @@ public class TowerPatroActivity extends BaseAppCompatActivity implements View.On
         tx2.setTextColor(Color.parseColor("#666666"));
         tx3.setTextColor(Color.parseColor("#666666"));
 
+    }
+    public static int REQUEST_CODE_1 = 1;
+    public static int RESULT_CODE_1 = 1;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == RESULT_CODE_1) {//resultCode是返回的结果码 在Other中通过setResult()方法返回给第一个activity
+            //editText.setText(data.getStringExtra("text"));//获取返回的数据，转成String类型 显示到edittext控件上
+            model = (LineTowerModel) data.getSerializableExtra("model");
+            ((TowerAccountFragment)f1).resetModel(model);
+            setCustomTitle(model.getNme(), true);
+        }
     }
 
 

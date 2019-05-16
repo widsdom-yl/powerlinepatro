@@ -40,11 +40,11 @@ public class DefectMainActivity extends BaseAppCompatActivity implements View.On
     public void onClick(View view) {
         if (view.getId() == R.id.button_defect_info){
             Intent intent = new Intent(this, ExistDefectActivity.class);
+
             startActivity(intent);
         }
         else if(view.getId() == R.id.button_upload_defect){
             Intent intent = new Intent(this, UploadDefectActivity.class);
-
             startActivity(intent);
         }
     }

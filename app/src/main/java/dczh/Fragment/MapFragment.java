@@ -79,6 +79,11 @@ public class MapFragment extends Fragment implements AMap.OnMyLocationChangeList
         fragment.setArguments(args);
         return fragment;
     }
+    public void resetModel(LineTowerModel m){
+        if (m!=null){
+            model = m;
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

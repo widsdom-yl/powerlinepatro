@@ -94,6 +94,28 @@ public class TowerAccountFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    public void resetModel(LineTowerModel m){
+        if (m!=null){
+            model = m;
+            TowerAccountItemModel model1 = new TowerAccountItemModel(getContext().getString(R.string.string_tower_account_name),model.getNme());
+            TowerAccountItemModel model2 = new TowerAccountItemModel(getContext().getString(R.string.string_tower_account_type),model.getTpe());
+//        TowerAccountItemModel model3 = new TowerAccountItemModel(getContext().getString(R.string.string_tower_account_type_detail),"SDGT-16");
+//        TowerAccountItemModel model4 = new TowerAccountItemModel(getContext().getString(R.string.string_tower_account_height),"23.1");
+//        TowerAccountItemModel model5 = new TowerAccountItemModel(getContext().getString(R.string.string_tower_account_big_distance),"117m");
+//        TowerAccountItemModel model6 = new TowerAccountItemModel(getContext().getString(R.string.string_tower_account_all_distance),"230m");
+            list.clear();
+            list.add(model1);
+            list.add(model2);
+//        list.add(model3);
+//        list.add(model4);
+//        list.add(model5);
+//        list.add(model6);
+            mAapter.resetMList(list);
+            mAapter.notifyDataSetChanged();
+
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -233,8 +255,13 @@ public class TowerAccountFragment extends Fragment implements View.OnClickListen
                             if (lists.size()>0){
                                 String body1 = new Gson().toJson(lists.get(0).getImg());
                                 List<UploadFileRetModel> mUrls  = GsonUtil.parseJsonArrayWithGson(body1, UploadFileRetModel[].class);
-
+                                mList = mUrls;
                                 mPatroAdapter.resetMList(mUrls);
+                                mPatroAdapter.notifyDataSetChanged();
+                            }
+                            else{
+                                mList = new ArrayList<>();
+                                mPatroAdapter.resetMList(mList);
                                 mPatroAdapter.notifyDataSetChanged();
                             }
 
@@ -252,7 +279,7 @@ public class TowerAccountFragment extends Fragment implements View.OnClickListen
 
     }
 
-
+    public static int REQUEST_CODE_1 = 1;
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.button_sign_parto){
@@ -260,7 +287,8 @@ public class TowerAccountFragment extends Fragment implements View.OnClickListen
             Bundle bundle = new Bundle();
             bundle.putSerializable(ARG_PARAM1,model);
             intent.putExtras(bundle);
-            startActivity(intent);
+           // startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE_1);
         }
         else{
             Intent intent = new Intent(this.getContext(), UploadDefectActivity.class);
@@ -270,6 +298,7 @@ public class TowerAccountFragment extends Fragment implements View.OnClickListen
             startActivity(intent);
         }
     }
+
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
