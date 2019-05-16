@@ -11,6 +11,16 @@ public class TowerDefectModel implements Serializable {
     String nme;
     String usr;
 
+    public String getTwr() {
+        return twr;
+    }
+
+    public void setTwr(String twr) {
+        this.twr = twr;
+    }
+
+    String twr;
+
     public int getPid() {
         return pid;
     }

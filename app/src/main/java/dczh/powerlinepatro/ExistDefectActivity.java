@@ -89,7 +89,7 @@ public class ExistDefectActivity extends BaseAppCompatActivity implements BaseAd
         FormBody formBody = new FormBody.Builder()
                 .add("pid", "0")
                 .add("aid", "0")
-                .add("cnt", "100")
+                .add("cnt", "300")
                 .build();
 
 

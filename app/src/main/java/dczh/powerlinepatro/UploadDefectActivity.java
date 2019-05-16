@@ -64,6 +64,8 @@ import top.zibin.luban.OnCompressListener;
 public class UploadDefectActivity extends BaseAppCompatActivity implements View.OnClickListener, BaseAdapter.OnItemClickListener, TowerProtolEditImageAdapter.DeleteClickListener, AdapterView.OnItemSelectedListener {
 
     private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM3 = "param3";
+    private static final String ARG_PARAM4 = "param4";
     private LineTowerModel model;
     private Spinner spinner;
     private List<String> data_list;
@@ -84,7 +86,8 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
     Integer mTakePhotoIndex = 0;
 
 
-
+    long lat;
+    long lot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +97,8 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null){
             model = (LineTowerModel)bundle.getSerializable(ARG_PARAM1);
+            lat = bundle.getLong(ARG_PARAM3);
+            lot = bundle.getLong(ARG_PARAM4);
         }
 
         if ( actionBar != null)
@@ -134,7 +139,7 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
         mAdpter.setOnItemClickListener(this);
         mAdpter.setmDeleteClickListener(this);
         findViewById(R.id.button_sign_defect).setOnClickListener(this);
-        requestLineTowerArray();
+        requestNearLineTowerArray();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -354,7 +359,7 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
 
     }
 
-    public void requestLineTowerArray() {
+    public void requestNearLineTowerArray() {
 
         if (lod == null)
         {
@@ -364,10 +369,20 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
 
 
         OkHttpClient client = new OkHttpClient();
-        FormBody formBody = new FormBody.Builder()
-                .add("lot", ""+model.getLot())
-                .add("lat", ""+model.getLat())
-                .build();
+        FormBody formBody ;
+        if (model != null){
+            formBody= new FormBody.Builder()
+                    .add("lot", ""+model.getLot())
+                    .add("lat", ""+model.getLat())
+                    .build();
+        }
+        else{
+            formBody= new FormBody.Builder()
+                    .add("lot", ""+lot)
+                    .add("lat", ""+lat)
+                    .build();
+        }
+
 
         MediaType mediaType = MediaType.parse("application/data");
         final Request request = new Request.Builder()

@@ -51,7 +51,7 @@ public class DefectDetailActivity extends BaseAppCompatActivity {
                 setCustomTitle(mLineTowerModel.getNme(), true);
             }
             else{
-                setCustomTitle("", true);
+                setCustomTitle(mDefectModel.getTwr(), true);
             }
         }
 
