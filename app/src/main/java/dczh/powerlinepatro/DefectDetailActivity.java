@@ -47,7 +47,12 @@ public class DefectDetailActivity extends BaseAppCompatActivity {
             String body1 = new Gson().toJson(mDefectModel.getImg());
             List<UploadFileRetModel> mUrls  = GsonUtil.parseJsonArrayWithGson(body1, UploadFileRetModel[].class);
             mLists = mUrls;
-            setCustomTitle(mLineTowerModel.getNme(), true);
+            if (mLineTowerModel != null){
+                setCustomTitle(mLineTowerModel.getNme(), true);
+            }
+            else{
+                setCustomTitle("", true);
+            }
         }
 
         mRecyclerView_item = findViewById(R.id.recyler_tower_patrol);
