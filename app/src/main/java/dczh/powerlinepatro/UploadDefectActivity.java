@@ -86,8 +86,8 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
     Integer mTakePhotoIndex = 0;
 
 
-    long lat;
-    long lot;
+    double lat;
+    double lot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +97,8 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null){
             model = (LineTowerModel)bundle.getSerializable(ARG_PARAM1);
-            lat = bundle.getLong(ARG_PARAM3);
-            lot = bundle.getLong(ARG_PARAM4);
+            lat = bundle.getDouble(ARG_PARAM3);
+            lot = bundle.getDouble(ARG_PARAM4);
         }
 
         if ( actionBar != null)

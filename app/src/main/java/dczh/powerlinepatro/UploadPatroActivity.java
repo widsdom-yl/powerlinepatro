@@ -122,7 +122,7 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         mFileArray.add("");
         mAdpter.setOnItemClickListener(this);
         mAdpter.setmDeleteClickListener(this);
-        findViewById(R.id.button_sign_defect).setOnClickListener(this);
+        findViewById(R.id.button_sign_parto).setOnClickListener(this);
         requestLineTowerArray();
     }
     @Override
