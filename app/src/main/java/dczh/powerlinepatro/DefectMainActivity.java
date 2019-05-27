@@ -76,11 +76,11 @@ public class DefectMainActivity extends BaseAppCompatActivity implements View.On
         else if(view.getId() == R.id.button_upload_defect){
             Intent intent = new Intent(this, UploadDefectActivity.class);
             Bundle bundle = new Bundle();
-           // bundle.putSerializable(ARG_PARAM1,model);
-//            bundle.putLong(ARG_PARAM3,lat);
-//            bundle.putLong(ARG_PARAM3,lot);
-            bundle.putDouble(ARG_PARAM4,119.585586);
-            bundle.putDouble(ARG_PARAM3,32.476958);
+            //bundle.putSerializable(ARG_PARAM1,model);
+            bundle.putDouble(ARG_PARAM3,lat);
+            bundle.putDouble(ARG_PARAM3,lot);
+//            bundle.putDouble(ARG_PARAM4,119.585586);
+//            bundle.putDouble(ARG_PARAM3,32.476958);
 
             intent.putExtras(bundle);
             startActivity(intent);

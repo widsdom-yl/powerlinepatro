@@ -47,7 +47,7 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
         list.add(getString(R.string.string_homepage0));
         list.add(getString(R.string.string_homepage1));
         list.add(getString(R.string.string_homepage2));
-        list.add(getString(R.string.string_homepage3));
+        list.add(getString(R.string.string_homepage4));
 
         mlocationClient = new AMapLocationClient(this);
 //初始化定位参数
@@ -92,6 +92,11 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
                 Intent intent2 = new Intent(this, DefectMainActivity.class);
                 startActivity(intent2);
                 break;
+            case 3:
+
+                Intent intent3 = new Intent(this, UploadNegotiationActivity.class);
+                startActivity(intent3);
+                break;
                 default:
                     break;
         }
@@ -102,16 +107,16 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
 
     }
 
-    long lat;
-    long lot;
+    double lat;
+    double lot;
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
         Log.e("MapFragment","x:"+aMapLocation.getLatitude());
         LatLng latLng = new LatLng(aMapLocation.getLatitude(),aMapLocation.getLongitude());
-        lat = (long) latLng.latitude;
-        lot = (long) latLng.longitude;
+        lat = (double) latLng.latitude;
+        lot = (double) latLng.longitude;
     }
-    public void uploadWorkerPos(long lat,long lot) {
+    public void uploadWorkerPos(double lat,double lot) {
 
         if (lod == null)
         {

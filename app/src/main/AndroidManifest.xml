@@ -57,7 +57,8 @@
         <activity android:name=".PartolDetailActivity" />
         <activity android:name=".DefectDetailActivity" />
         <activity android:name=".DefectMainActivity" />
-        <activity android:name=".ExistDefectActivity"></activity>
+        <activity android:name=".ExistDefectActivity" />
+        <activity android:name=".UploadNegotiationActivity"></activity>
     </application>
 
 </manifest>

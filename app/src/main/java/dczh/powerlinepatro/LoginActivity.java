@@ -247,8 +247,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 {
 //                    Log.e(tag, "add deny:" + i);
                     denied[i] = list.get(i);
-                    ActivityCompat.requestPermissions(this, denied, i);
+
                 }
+                ActivityCompat.requestPermissions(this, denied, 321);
 
             }
         }

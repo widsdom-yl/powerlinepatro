@@ -9,6 +9,8 @@
     <string name="string_homepage1">巡视状况</string>
     <string name="string_homepage2">缺陷信息</string>
     <string name="string_homepage3">个人中心</string>
+    <string name="string_homepage4">上传交涉</string>
+
     <string name="string_uploadposition">上传轨迹</string>
     <string name="string_linepatro">线路巡视</string>
     <string name="string_patrodetail">巡视状况</string>
@@ -40,6 +42,7 @@
     <string name="string_sign_patro">巡视登记</string>
     <string name="string_album">从相册中选取</string>
     <string name="string_take_photo">拍照</string>
+    <string name="string_take_video">录制视频</string>
     <string name="string_cancel">取消</string>
     <string name="string_submit">提交</string>
     <string name="string_remark">备注:</string>
@@ -61,6 +64,7 @@
     <string name="login_success">登录成功</string>
     <string name="error_request_failed">请求失败</string>
     <string name="string_upload_img_success">上传图片成功</string>
+    <string name="string_upload_vid_success">上传交涉视频成功</string>
     <string name="string_upload_file1">已上传第</string>
     <string name="string_upload_file2">张图片</string>
     <string name="string_gaode">高德地图</string>

@@ -1,5 +1,8 @@
 package dczh.adapter;
 
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -34,7 +37,16 @@ public class TowerProtolEditImageAdapter extends BaseAdapter<String> {
             //imageView.setBackgroundColor(color);
             RequestOptions requestOptions = new RequestOptions().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE);
             //将图片显示在ivImage上
-            Glide.with(MyApplication.getInstance()).load(filePath).apply(requestOptions).into(imageView);
+            if (filePath.contains("jpeg")){
+                Glide.with(MyApplication.getInstance()).load(filePath).apply(requestOptions).into(imageView);
+            }
+            else if(filePath.contains("mp4")){
+                Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(filePath,
+                        MediaStore.Images.Thumbnails.MINI_KIND);
+                imageView.setImageBitmap(bitmap);
+            }
+
+
         }
 
         deleteButton.setOnClickListener(new View.OnClickListener()
