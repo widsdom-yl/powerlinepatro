@@ -37,6 +37,8 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
     HomePageAdapter adapter;
     public AMapLocationClient mlocationClient;
     public AMapLocationClientOption mLocationOption = null;
+    private static final String ARG_PARAM3 = "param3";
+    private static final String ARG_PARAM4 = "param4";
     List<String> list=new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,7 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
         adapter.setOnItemClickListener(this);
         homePageRecyclerView.setAdapter(adapter);
         findViewById(R.id.upload_pos_btn).setOnClickListener(this);
+        findViewById(R.id.upload_partol_btn).setOnClickListener(this);
 
     }
 
@@ -89,6 +92,13 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
                 break;
             case 1:
                 Intent intent1 = new Intent(this, UploadCrossActivity.class);
+                Bundle bundle = new Bundle();
+                //bundle.putSerializable(ARG_PARAM1,model);
+                bundle.putDouble(ARG_PARAM3,lat);
+                bundle.putDouble(ARG_PARAM4,lot);
+//            bundle.putDouble(ARG_PARAM4,119.585586);
+//            bundle.putDouble(ARG_PARAM3,32.476958);
+                intent1.putExtras(bundle);
                 startActivity(intent1);
                 break;
             case 2:
@@ -133,8 +143,8 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
         FormBody formBody = new FormBody.Builder()
                 .add("uid", ""+ AccountManager.getInstance().getUid())
                 .add("token",  AccountManager.getInstance().getToken())
-                .add("lot",  ""+lat)
-                .add("lat", ""+ lot)
+                .add("lot",  ""+lot)
+                .add("lat", ""+ lat)
                 .build();
 
 
@@ -187,6 +197,17 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
     public void onClick(View view) {
         if (view.getId() == R.id.upload_pos_btn){
             uploadWorkerPos(lot,lat);
+        }
+        else if(view.getId() == R.id.upload_partol_btn){
+            Intent intent1 = new Intent(this, UploadPatroActivity.class);
+            Bundle bundle = new Bundle();
+            //bundle.putSerializable(ARG_PARAM1,model);
+            bundle.putDouble(ARG_PARAM3,lat);
+            bundle.putDouble(ARG_PARAM4,lot);
+//            bundle.putDouble(ARG_PARAM4,119.585586);
+//            bundle.putDouble(ARG_PARAM3,32.476958);
+            intent1.putExtras(bundle);
+            startActivity(intent1);
         }
     }
 }

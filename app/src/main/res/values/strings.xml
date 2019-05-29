@@ -13,6 +13,7 @@
     <string name="string_homepage5">交跨物</string>
 
     <string name="string_uploadposition">上传轨迹</string>
+    <string name="string_uploadpatrol">一键巡视</string>
     <string name="string_linepatro">线路巡视</string>
     <string name="string_patrodetail">巡视状况</string>
     <string name="string_defect">缺陷隐患</string>

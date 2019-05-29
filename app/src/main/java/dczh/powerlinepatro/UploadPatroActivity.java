@@ -62,6 +62,8 @@ import top.zibin.luban.OnCompressListener;
 //上传巡视图片
 public class UploadPatroActivity extends BaseAppCompatActivity implements View.OnClickListener, BaseAdapter.OnItemClickListener, TowerProtolEditImageAdapter.DeleteClickListener,AdapterView.OnItemSelectedListener {
     private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM3 = "param3";
+    private static final String ARG_PARAM4 = "param4";
     private LineTowerModel model;
     List<LineTowerModel>nearTowerList = new ArrayList<>();
     private Spinner spinner;
@@ -79,7 +81,8 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
 
     List<String> mFileArray = new ArrayList<>();
     Integer mTakePhotoIndex = 0;
-
+    double lat;
+    double lot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +90,12 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         setContentView(R.layout.activity_upload_patro);
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         Bundle bundle = this.getIntent().getExtras();
-        model = (LineTowerModel)bundle.getSerializable(ARG_PARAM1);
+
+        if (bundle != null){
+            model = (LineTowerModel)bundle.getSerializable(ARG_PARAM1);
+            lat = bundle.getDouble(ARG_PARAM3);
+            lot = bundle.getDouble(ARG_PARAM4);
+        }
         if ( actionBar != null)
         {
             setCustomTitle(getString(R.string.string_sign_patro), true);
@@ -97,7 +105,9 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         spinner = findViewById(R.id.spinner);
         //数据
         data_list = new ArrayList<String>();
-        data_list.add(model.getNme());
+        if (model != null){
+            data_list.add(model.getNme());
+        }
 
        // arr_adapter.
         //适配器
@@ -255,10 +265,23 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
 
 
         OkHttpClient client = new OkHttpClient();
-        FormBody formBody = new FormBody.Builder()
-                .add("lot", ""+model.getLot())
-                .add("lat", ""+model.getLat())
-                .build();
+
+        FormBody formBody;
+
+        if (model != null){
+            formBody= new FormBody.Builder()
+                    .add("lot", ""+model.getLot())
+                    .add("lat", ""+model.getLat())
+                    .build();
+        }
+        else{
+            formBody= new FormBody.Builder()
+                    .add("lot", ""+lot)
+                    .add("lat", ""+lat)
+                    .build();
+        }
+
+
 
         MediaType mediaType = MediaType.parse("application/data");
         final Request request = new Request.Builder()
