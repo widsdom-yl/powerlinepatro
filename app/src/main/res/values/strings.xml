@@ -10,6 +10,7 @@
     <string name="string_homepage2">缺陷信息</string>
     <string name="string_homepage3">个人中心</string>
     <string name="string_homepage4">上传交涉</string>
+    <string name="string_homepage5">交跨物</string>
 
     <string name="string_uploadposition">上传轨迹</string>
     <string name="string_linepatro">线路巡视</string>
@@ -64,6 +65,7 @@
     <string name="login_success">登录成功</string>
     <string name="error_request_failed">请求失败</string>
     <string name="string_upload_img_success">上传图片成功</string>
+    <string name="string_upload_cross_success">提交交跨物成功</string>
     <string name="string_upload_vid_success">上传交涉视频成功</string>
     <string name="string_upload_file1">已上传第</string>
     <string name="string_upload_file2">张图片</string>

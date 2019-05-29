@@ -37,7 +37,7 @@ public class TowerProtolEditImageAdapter extends BaseAdapter<String> {
             //imageView.setBackgroundColor(color);
             RequestOptions requestOptions = new RequestOptions().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE);
             //将图片显示在ivImage上
-            if (filePath.contains("jpeg")){
+            if (filePath.contains("jpeg") || filePath.contains("jpg") || filePath.contains("png")){
                 Glide.with(MyApplication.getInstance()).load(filePath).apply(requestOptions).into(imageView);
             }
             else if(filePath.contains("mp4")){

@@ -35,7 +35,7 @@ public class HomePageAdapter extends BaseAdapter<String>
                 break;
             case 1:
                 backGroundImageView.setBackgroundColor(Color.parseColor("#FBB45A"));
-                iconImageView.setImageResource(R.drawable.homepage_patroinfo);
+                iconImageView.setImageResource(R.drawable.linecross);
                 break;
             case 2:
                 backGroundImageView.setBackgroundColor(Color.parseColor("#F96269"));

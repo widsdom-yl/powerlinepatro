@@ -58,7 +58,8 @@
         <activity android:name=".DefectDetailActivity" />
         <activity android:name=".DefectMainActivity" />
         <activity android:name=".ExistDefectActivity" />
-        <activity android:name=".UploadNegotiationActivity"></activity>
+        <activity android:name=".UploadNegotiationActivity" />
+        <activity android:name=".UploadCrossActivity"></activity>
     </application>
 
 </manifest>

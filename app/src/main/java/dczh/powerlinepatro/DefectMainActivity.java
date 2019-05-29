@@ -78,7 +78,7 @@ public class DefectMainActivity extends BaseAppCompatActivity implements View.On
             Bundle bundle = new Bundle();
             //bundle.putSerializable(ARG_PARAM1,model);
             bundle.putDouble(ARG_PARAM3,lat);
-            bundle.putDouble(ARG_PARAM3,lot);
+            bundle.putDouble(ARG_PARAM4,lot);
 //            bundle.putDouble(ARG_PARAM4,119.585586);
 //            bundle.putDouble(ARG_PARAM3,32.476958);
 

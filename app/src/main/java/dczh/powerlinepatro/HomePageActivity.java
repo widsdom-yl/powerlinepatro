@@ -45,7 +45,7 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
         getSupportActionBar().show();
         setCustomTitle(getString(R.string.string_main_title)+"gyl",false);
         list.add(getString(R.string.string_homepage0));
-        list.add(getString(R.string.string_homepage1));
+        list.add(getString(R.string.string_homepage5));
         list.add(getString(R.string.string_homepage2));
         list.add(getString(R.string.string_homepage4));
 
@@ -86,6 +86,10 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
             case 0:
                 Intent intent = new Intent(this, LinePatroActivity.class);
                 startActivity(intent);
+                break;
+            case 1:
+                Intent intent1 = new Intent(this, UploadCrossActivity.class);
+                startActivity(intent1);
                 break;
             case 2:
 
