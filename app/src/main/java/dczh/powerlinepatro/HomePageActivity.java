@@ -6,6 +6,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -39,6 +40,8 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
     public AMapLocationClientOption mLocationOption = null;
     private static final String ARG_PARAM3 = "param3";
     private static final String ARG_PARAM4 = "param4";
+    public TextView tx_lat;
+    public TextView tx_lot;
     List<String> list=new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +83,8 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
         homePageRecyclerView.setAdapter(adapter);
         findViewById(R.id.upload_pos_btn).setOnClickListener(this);
         findViewById(R.id.upload_partol_btn).setOnClickListener(this);
+        tx_lat = findViewById(R.id.tx_lat);
+        tx_lot = findViewById(R.id.tx_long);
 
     }
 
@@ -129,6 +134,8 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
         LatLng latLng = new LatLng(aMapLocation.getLatitude(),aMapLocation.getLongitude());
         lat = (double) latLng.latitude;
         lot = (double) latLng.longitude;
+        tx_lat.setText(String.format("%.5f", lat));
+        tx_lot.setText(String.format("%.5f", lot));
     }
     public void uploadWorkerPos(double lat,double lot) {
 
@@ -196,7 +203,7 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.upload_pos_btn){
-            uploadWorkerPos(lot,lat);
+            uploadWorkerPos(lat,lot);
         }
         else if(view.getId() == R.id.upload_partol_btn){
             Intent intent1 = new Intent(this, UploadPatroActivity.class);
