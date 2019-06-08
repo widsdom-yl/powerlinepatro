@@ -24,11 +24,12 @@
         android:layout_height="50dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="46dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/button_green_small_corner"
         android:text="@string/string_uploadposition"
         android:textAllCaps="false"
         android:textColor="#ffffff"
+        android:visibility="invisible"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -42,7 +43,7 @@
         android:layout_height="50dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/button_green_small_corner"
         android:text="@string/string_uploadpatrol"
         android:textAllCaps="false"
@@ -68,16 +69,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="21dp"
         android:text="经度:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintStart_toEndOf="@+id/tx_lat"
+        app:layout_constraintTop_toBottomOf="@+id/upload_pos_btn" />
 
     <TextView
         android:id="@+id/tx_lat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="23dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="21dp"
         app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/upload_pos_btn" />
@@ -86,10 +87,10 @@
         android:id="@+id/tx_long"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="21dp"
         app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/tx_lat" />
+        app:layout_constraintTop_toBottomOf="@+id/upload_pos_btn" />
 
 
 </android.support.constraint.ConstraintLayout>

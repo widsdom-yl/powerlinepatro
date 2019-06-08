@@ -2,12 +2,12 @@ package dczh.powerlinepatro;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -71,7 +71,7 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
 // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
 //启动定位
        mlocationClient.startLocation();
-
+        handler.postDelayed(runnable, 5000);
         initView();
     }
     void initView(){
@@ -139,11 +139,11 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
     }
     public void uploadWorkerPos(double lat,double lot) {
 
-        if (lod == null)
-        {
-            lod = new LoadingDialog(this);
-        }
-        lod.dialogShow();
+//        if (lod == null)
+//        {
+//            lod = new LoadingDialog(this);
+//        }
+//        lod.dialogShow();
 
 
         OkHttpClient client = new OkHttpClient();
@@ -166,8 +166,8 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                lod.dismiss();
-                Toast.makeText(HomePageActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
+//                lod.dismiss();
+//                Toast.makeText(HomePageActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -176,20 +176,20 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
                 Log.e(tag,"res is "+res);
                 final ResponseModel model  = GsonUtil.parseJsonWithGson(res,ResponseModel.class);
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //
-                        lod.dismiss();
-                        if (model != null && model.error_code==0){
-                            Toast.makeText(HomePageActivity.this, getString(R.string.string_uploadsuccess), Toast.LENGTH_LONG).show();
-
-                        }
-                        else{
-                            Toast.makeText(HomePageActivity.this, getString(R.string.string_uploadfailed), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        //
+//                        lod.dismiss();
+//                        if (model != null && model.error_code==0){
+//                            Toast.makeText(HomePageActivity.this, getString(R.string.string_uploadsuccess), Toast.LENGTH_LONG).show();
+//
+//                        }
+//                        else{
+//                            Toast.makeText(HomePageActivity.this, getString(R.string.string_uploadfailed), Toast.LENGTH_LONG).show();
+//                        }
+//                    }
+//                });
             }
         });
 
@@ -217,4 +217,17 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
             startActivity(intent1);
         }
     }
+    Handler handler = new Handler();
+    Runnable runnable = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            if (lat >0 && lot>0){
+                uploadWorkerPos(lat,lot);
+            }
+            handler.postDelayed(runnable, 1000*60*5);
+        }
+    };
+
 }
