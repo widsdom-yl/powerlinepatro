@@ -1,11 +1,14 @@
 package dczh.powerlinepatro;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -81,12 +84,48 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
         adapter = new HomePageAdapter(list);
         adapter.setOnItemClickListener(this);
         homePageRecyclerView.setAdapter(adapter);
-        findViewById(R.id.upload_pos_btn).setOnClickListener(this);
+        findViewById(R.id.btn_exit_login).setOnClickListener(this);
         findViewById(R.id.upload_partol_btn).setOnClickListener(this);
         tx_lat = findViewById(R.id.tx_lat);
         tx_lot = findViewById(R.id.tx_long);
 
     }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item)
+//    {
+//        switch (item.getItemId())
+//        {
+//            case android.R.id.home:
+//
+//                handler.removeCallbacks(runnable);
+//                this.finish(); // back button
+//                return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.tip)
+                    .setMessage(R.string.closeapp)
+                    .setPositiveButton(getString(R.string.ok),new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            handler.removeCallbacks(runnable);
+                            HomePageActivity.this.finish(); // back button
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.cancel), null).
+                    show();
+
+
+            return false;
+        }else {
+            return super.onKeyDown(keyCode, event);
+        }
+    }
+
 
     @Override
     public void onItemClick(View view, int position) {
@@ -107,7 +146,6 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
                 startActivity(intent1);
                 break;
             case 2:
-
                 Intent intent2 = new Intent(this, DefectMainActivity.class);
                 startActivity(intent2);
                 break;
@@ -193,17 +231,18 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
             }
         });
 
-
-
-
     }
     LoadingDialog lod;
     static  final String tag = "HomePageActivity";
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.upload_pos_btn){
-            uploadWorkerPos(lat,lot);
+        if (view.getId() == R.id.btn_exit_login){
+           // uploadWorkerPos(lat,lot);
+            Intent intent = new Intent(HomePageActivity.this, LoginActivity.class);
+            startActivity(intent);
+            HomePageActivity.this.finish();
+            AccountManager.getInstance().saveRemeber(false);
         }
         else if(view.getId() == R.id.upload_partol_btn){
             Intent intent1 = new Intent(this, UploadPatroActivity.class);

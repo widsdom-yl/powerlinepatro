@@ -366,8 +366,10 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         switch (requestCode) {
             case RC_CHOOSE_PHOTO:
                 Uri uri = data.getData();
+              //  Toast.makeText(this,uri.toString(),Toast.LENGTH_LONG).show();
                 String filePath = FileUtil.getFilePathByUri(this, uri);
 
+               // Toast.makeText(this,filePath,Toast.LENGTH_LONG).show();
                 if (!TextUtils.isEmpty(filePath)) {
                     //RequestOptions requestOptions1 = new RequestOptions().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE);
 //                    将照片显示在 ivImage上

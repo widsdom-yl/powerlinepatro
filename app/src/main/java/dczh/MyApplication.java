@@ -2,6 +2,7 @@ package dczh;
 
 import android.app.Application;
 
+import com.tencent.bugly.crashreport.CrashReport;
 
 
 public class MyApplication extends Application
@@ -20,6 +21,7 @@ public class MyApplication extends Application
             MyContext.init(getApplicationContext());
         }
 
+        CrashReport.initCrashReport(getApplicationContext(), "b5f18f38f0", true);
 
 
     }

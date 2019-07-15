@@ -53,7 +53,7 @@ public class LinePatroActivity extends BaseAppCompatActivity implements BaseExpa
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         initValue();
-
+        //CrashReport.testJavaCrash();
 
     }
     public void initValue(){

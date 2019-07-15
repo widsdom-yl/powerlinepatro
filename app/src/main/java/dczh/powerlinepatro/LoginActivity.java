@@ -76,12 +76,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         checkbox.setChecked(IsAutoLogin);
 
 
-        if (IsAutoLogin){
-            UserName = AccountManager.getInstance().getDefaultUsr();
-            mUserView.setText(UserName);
-            Password = AccountManager.getInstance().getDefaultPwd();
-            mPasswordView.setText(Password);
-        }
+        UserName = AccountManager.getInstance().getDefaultUsr();
+        mUserView.setText(UserName);
+        Password = AccountManager.getInstance().getDefaultPwd();
+        mPasswordView.setText(Password);
 
 
         checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
