@@ -79,4 +79,6 @@
     <string name="tip">提示</string>
     <string name="closeapp">确定退出？</string>
     <string name="exit_login">退出登陆</string>
+    <string name="error_relogin">登陆失效，请重新登陆</string>
+
 </resources>

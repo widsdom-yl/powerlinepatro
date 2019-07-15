@@ -1,6 +1,7 @@
 package dczh.powerlinepatro;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -294,8 +295,13 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                lod.dismiss();
-                Toast.makeText(UploadPatroActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        lod.dismiss();
+                        Toast.makeText(UploadPatroActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
+                    }});
+
             }
 
             @Override
@@ -362,6 +368,12 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode != Activity.RESULT_OK){
+            //return
+            return;
+        }
+
 
         switch (requestCode) {
             case RC_CHOOSE_PHOTO:
@@ -497,6 +509,15 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
 
 
 
+
+        if (AccountManager.getInstance().getToken() == null || AccountManager.getInstance().getUid() ==0){
+            Toast.makeText(UploadPatroActivity.this, getString(R.string.error_relogin), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            this.finish();
+            return;
+        }
+
         OkHttpClient client = new OkHttpClient();
 
 
@@ -547,8 +568,17 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                lod.dismiss();
-                Toast.makeText(UploadPatroActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
+
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        lod.dismiss();
+                        Toast.makeText(UploadPatroActivity.this, "Post Failed", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
             }
 
             @Override

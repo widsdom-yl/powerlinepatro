@@ -12,7 +12,7 @@ android {
         applicationId "dczh.powerlinepatro"
         minSdkVersion 22
         targetSdkVersion 27
-        versionCode 10000
+        versionCode 10001
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {

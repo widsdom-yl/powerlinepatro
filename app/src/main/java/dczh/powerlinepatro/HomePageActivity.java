@@ -77,6 +77,13 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
         handler.postDelayed(runnable, 5000);
         initView();
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacks(runnable);
+    }
+
     void initView(){
         homePageRecyclerView = findViewById(R.id.home_grid_view);
         GridLayoutManager layoutManage = new GridLayoutManager(this, 2);
@@ -183,6 +190,10 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
 //        }
 //        lod.dialogShow();
 
+
+        if (AccountManager.getInstance().getToken() == null){
+
+        }
 
         OkHttpClient client = new OkHttpClient();
         FormBody formBody = new FormBody.Builder()

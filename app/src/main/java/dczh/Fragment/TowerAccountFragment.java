@@ -234,8 +234,14 @@ public class TowerAccountFragment extends Fragment implements View.OnClickListen
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                lod.dismiss();
-                Toast.makeText(TowerAccountFragment.this.getContext(), getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        lod.dismiss();
+                        Toast.makeText(getActivity(), getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
 
             @Override

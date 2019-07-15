@@ -111,8 +111,14 @@ public class LineDetailActivity extends BaseAppCompatActivity implements BaseAda
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                lod.dismiss();
-                Toast.makeText(LineDetailActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
+                runOnUiThread(new Runnable() {
+                                  @Override
+                                  public void run() {
+                                      lod.dismiss();
+                                      Toast.makeText(LineDetailActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
+                                  }
+                              });
+
             }
 
             @Override

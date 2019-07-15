@@ -1,6 +1,7 @@
 package dczh.powerlinepatro;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -280,6 +281,11 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if(resultCode != Activity.RESULT_OK){
+            //return
+            return;
+        }
+
         switch (requestCode) {
             case RC_CHOOSE_PHOTO:
                 Uri uri = data.getData();
@@ -395,8 +401,14 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                lod.dismiss();
-                Toast.makeText(UploadDefectActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        lod.dismiss();
+                        Toast.makeText(UploadDefectActivity.this, "Post Failed", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
             }
 
             @Override

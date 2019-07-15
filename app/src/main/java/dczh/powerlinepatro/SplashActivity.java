@@ -90,9 +90,15 @@ public class SplashActivity extends AppCompatActivity {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                lod.dismiss();
-                Toast.makeText(SplashActivity.this, "Post Failed", Toast.LENGTH_SHORT).show();
-                openLoginActivity();
+                runOnUiThread(new Runnable() {
+                                  @Override
+                                  public void run() {
+                                      lod.dismiss();
+                                      Toast.makeText(SplashActivity.this, "Post Failed", Toast.LENGTH_SHORT).show();
+                                      openLoginActivity();
+                                  }
+                              });
+
             }
 
             @Override

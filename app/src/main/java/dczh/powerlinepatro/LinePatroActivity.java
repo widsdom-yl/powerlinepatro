@@ -157,9 +157,15 @@ public class LinePatroActivity extends BaseAppCompatActivity implements BaseExpa
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                lod.dismiss();
-                Toast.makeText(LinePatroActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
-            }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        lod.dismiss();
+                        Toast.makeText(LinePatroActivity.this, "Post Failed", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+                }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {

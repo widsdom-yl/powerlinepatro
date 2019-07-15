@@ -207,9 +207,14 @@ public class DefectFragment extends Fragment implements BaseAdapter.OnItemClickL
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                lod.dismiss();
-                Toast.makeText(DefectFragment.this.getContext(), getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
-            }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        lod.dismiss();
+                        Toast.makeText(getActivity(), getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
+                    }
+                });
+               }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
