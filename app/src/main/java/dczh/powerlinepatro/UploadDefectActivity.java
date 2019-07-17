@@ -134,9 +134,10 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
         mEditDefect = findViewById(R.id.edit_defect);
         GridLayoutManager layoutManage = new GridLayoutManager(this, 3);
         mRecyclerView.setLayoutManager(layoutManage);
+        mFileArray.add("");
         mAdpter = new TowerProtolEditImageAdapter(mFileArray);
         mRecyclerView.setAdapter(mAdpter);
-        mFileArray.add("");
+
         mAdpter.setOnItemClickListener(this);
         mAdpter.setmDeleteClickListener(this);
         findViewById(R.id.button_sign_defect).setOnClickListener(this);

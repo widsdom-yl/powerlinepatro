@@ -28,7 +28,7 @@ public class TowerProtolEditImageAdapter extends BaseAdapter<String> {
         super.convert(holder, filePath, position);
         ImageView imageView = holder.getView(R.id.image_tower_patrol);
         ImageButton deleteButton = holder.getView(R.id.button_delete);
-        if (filePath.length() == 0){
+        if (filePath == null && filePath.length() == 0){
             imageView.setImageResource(R.drawable.add);
             deleteButton.setVisibility(View.INVISIBLE);
         }

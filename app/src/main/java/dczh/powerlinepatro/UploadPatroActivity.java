@@ -128,9 +128,9 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         mRecyclerView = findViewById(R.id.recyler_inspect_signin_image);
         GridLayoutManager layoutManage = new GridLayoutManager(this, 3);
         mRecyclerView.setLayoutManager(layoutManage);
+        mFileArray.add("");
         mAdpter = new TowerProtolEditImageAdapter(mFileArray);
         mRecyclerView.setAdapter(mAdpter);
-        mFileArray.add("");
         mAdpter.setOnItemClickListener(this);
         mAdpter.setmDeleteClickListener(this);
         findViewById(R.id.button_sign_parto).setOnClickListener(this);

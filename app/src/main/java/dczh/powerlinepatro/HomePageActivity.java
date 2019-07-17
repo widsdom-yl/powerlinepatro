@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -191,8 +192,12 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
 //        lod.dialogShow();
 
 
-        if (AccountManager.getInstance().getToken() == null){
-
+        if (AccountManager.getInstance().getToken() == null || AccountManager.getInstance().getUid() ==0){
+            Toast.makeText(HomePageActivity.this, getString(R.string.error_relogin), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            this.finish();
+            return;
         }
 
         OkHttpClient client = new OkHttpClient();

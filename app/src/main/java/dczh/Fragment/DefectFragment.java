@@ -235,7 +235,7 @@ public class DefectFragment extends Fragment implements BaseAdapter.OnItemClickL
                             mAapter.notifyDataSetChanged();
                         }
                         else{
-                            Toast.makeText(DefectFragment.this.getContext(), getString(R.string.error_request_failed), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), getString(R.string.error_request_failed), Toast.LENGTH_LONG).show();
                         }
                     }
                 });

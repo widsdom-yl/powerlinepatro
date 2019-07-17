@@ -145,9 +145,10 @@ public class UploadCrossActivity extends BaseAppCompatActivity implements View.O
         mEditCross = findViewById(R.id.edit_cross);
         GridLayoutManager layoutManage = new GridLayoutManager(this, 3);
         mRecyclerView.setLayoutManager(layoutManage);
+        mFileArray.add("");
         mAdpter = new TowerProtolEditImageAdapter(mFileArray);
         mRecyclerView.setAdapter(mAdpter);
-        mFileArray.add("");
+
         mAdpter.setOnItemClickListener(this);
         mAdpter.setmDeleteClickListener(this);
         findViewById(R.id.button_sign_cross).setOnClickListener(this);

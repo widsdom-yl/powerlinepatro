@@ -182,8 +182,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                lod.dismiss();
-                Toast.makeText(LoginActivity.this, "Post Failed", Toast.LENGTH_SHORT).show();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        lod.dismiss();
+                        Toast.makeText(LoginActivity.this, "Post Failed", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
             }
 
             @Override

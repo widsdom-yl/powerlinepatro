@@ -68,11 +68,7 @@ public class SplashActivity extends AppCompatActivity {
 
     public void login(final String mUserName, final String mPassword) {
 
-        if (lod == null)
-        {
-            lod = new LoadingDialog(this);
-        }
-        lod.dialogShow();
+
 
 
         OkHttpClient client = new OkHttpClient();
@@ -93,7 +89,7 @@ public class SplashActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                                   @Override
                                   public void run() {
-                                      lod.dismiss();
+
                                       Toast.makeText(SplashActivity.this, "Post Failed", Toast.LENGTH_SHORT).show();
                                       openLoginActivity();
                                   }
@@ -110,7 +106,7 @@ public class SplashActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         //
-                        lod.dismiss();
+
                         if (model != null && model.error_code==0){
                             String body = new Gson().toJson(model.data);
                             AccountManager.getInstance().saveAccount(mUserName, mPassword, IsAutoLogin);
