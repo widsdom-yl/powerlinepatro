@@ -61,6 +61,9 @@ public class PatrolImageDetailActivity extends BaseAppCompatActivity {
     {
         imageView = findViewById(R.id.detail_image);
         Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+        if (bitmap == null){
+            return;
+        }
         imageView.setImageBitmap(bitmap);
 
         WindowManager wm = (WindowManager) this

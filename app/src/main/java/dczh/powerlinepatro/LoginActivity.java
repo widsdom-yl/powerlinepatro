@@ -203,6 +203,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void run() {
                         //
+
+
                         lod.dismiss();
                         if (model != null && model.error_code==0){
                             String body = new Gson().toJson(model.data);

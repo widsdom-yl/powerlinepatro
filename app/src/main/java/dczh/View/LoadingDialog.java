@@ -33,7 +33,8 @@ public class LoadingDialog
      */
     public void dismiss()
     {
-        loadingDialog.dismiss();
+        if (loadingDialog.isShowing())
+            loadingDialog.dismiss();
     }
 
     /**

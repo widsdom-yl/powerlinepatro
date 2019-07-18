@@ -128,6 +128,7 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         mRecyclerView = findViewById(R.id.recyler_inspect_signin_image);
         GridLayoutManager layoutManage = new GridLayoutManager(this, 3);
         mRecyclerView.setLayoutManager(layoutManage);
+        mFileArray.clear();
         mFileArray.add("");
         mAdpter = new TowerProtolEditImageAdapter(mFileArray);
         mRecyclerView.setAdapter(mAdpter);
@@ -135,6 +136,11 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         mAdpter.setmDeleteClickListener(this);
         findViewById(R.id.button_sign_parto).setOnClickListener(this);
         requestLineTowerArray();
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        mAdpter.notifyDataSetChanged();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -634,9 +640,15 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                lod.dismiss();
-                Toast.makeText(UploadPatroActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
-            }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        lod.dismiss();
+                        Toast.makeText(UploadPatroActivity.this, "Post Failed", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
