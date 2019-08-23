@@ -15,6 +15,8 @@ import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.umeng.message.PushAgent;
+
 public class BaseAppCompatActivity extends AppCompatActivity
 {
     @Override
@@ -22,6 +24,7 @@ public class BaseAppCompatActivity extends AppCompatActivity
     {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
+        PushAgent.getInstance(this).onAppStart();
     }
 
     @Override

@@ -11,12 +11,12 @@ public class UserModel {
         this.uid = uid;
     }
 
-    public String getNme() {
-        return nme;
+    public String getName() {
+        return name;
     }
 
-    public void setNme(String nme) {
-        this.nme = nme;
+    public void setName(String nme) {
+        this.name = nme;
     }
 
     public String getToken() {
@@ -27,6 +27,6 @@ public class UserModel {
         this.token = token;
     }
 
-    private String nme;
+    private String name;
     private String token;
 }

@@ -29,6 +29,16 @@ public class AccountManager {
     int uid;
     String token;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    String name;
+
     private static class AccountManagerHolder {
         private static final AccountManager INSTANCE = new AccountManager(MyApplication.getInstance());
     }
@@ -39,7 +49,32 @@ public class AccountManager {
     {
         this.context = context;
     }
-    public void saveAccount(String usr,String pwd,boolean isRemeber){
+    public void saveName(String name){
+
+        SharedPreferences pref = context.getSharedPreferences("account",MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+
+        // if (isRemeber){
+
+        editor.putString("name",name);
+        // }
+        editor.commit();
+    }
+
+    public void saveDeviceToken(String deviceToken){
+
+        SharedPreferences pref = context.getSharedPreferences("account",MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+
+        // if (isRemeber){
+
+        editor.putString("deviceToken",deviceToken);
+        // }
+        editor.commit();
+    }
+
+
+    public void saveAccount(String usr,String pwd,String name,boolean isRemeber){
 
         SharedPreferences pref = context.getSharedPreferences("account",MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
@@ -48,6 +83,7 @@ public class AccountManager {
 
         editor.putString("usr",usr);
         editor.putString("pwd",pwd);
+        editor.putString("name",name);
         // }
         editor.commit();
     }
@@ -74,6 +110,17 @@ public class AccountManager {
         SharedPreferences pref = context.getSharedPreferences("account",MODE_PRIVATE);
         String pwd = pref.getString("pwd","");//第二个参数为默认值
         return pwd;
+    }
+    public String getDefaultDeviceToken(){
+        SharedPreferences pref = context.getSharedPreferences("account",MODE_PRIVATE);
+        String deviceToken = pref.getString("deviceToken","");//第二个参数为默认值
+        return deviceToken;
+    }
+
+    public String getDefaultName(){
+        SharedPreferences pref = context.getSharedPreferences("account",MODE_PRIVATE);
+        String name = pref.getString("name","");//第二个参数为默认值
+        return name;
     }
 
 

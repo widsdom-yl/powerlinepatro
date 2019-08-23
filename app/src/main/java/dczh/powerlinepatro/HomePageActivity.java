@@ -1,9 +1,12 @@
 package dczh.powerlinepatro;
 
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dczh.Manager.AccountManager;
+import dczh.Service.UploadGPSService;
 import dczh.Util.Config;
 import dczh.Util.GsonUtil;
 import dczh.View.LoadingDialog;
@@ -47,12 +51,37 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
     public TextView tx_lat;
     public TextView tx_lot;
     List<String> list=new ArrayList<String>();
+
+    private UploadGPSService service = null;
+    private boolean isBind = false;
+
+    private ServiceConnection conn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder binder) {
+            isBind = true;
+            UploadGPSService.MyBinder myBinder = (UploadGPSService.MyBinder) binder;
+            service = myBinder.getService();
+            Log.i("Kathy", "ActivityA - onServiceConnected");
+            int num = service.getRandomNumber();
+            Log.i("Kathy", "ActivityA - getRandomNumber = " + num);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBind = false;
+            Log.i("Kathy", "ActivityA - onServiceDisconnected");
+        }
+    };
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
         getSupportActionBar().show();
-        setCustomTitle(getString(R.string.string_main_title)+"gyl",false);
+        setCustomTitle(getString(R.string.string_main_title)+AccountManager.getInstance().getDefaultName(),false);
         list.add(getString(R.string.string_homepage0));
         list.add(getString(R.string.string_homepage5));
         list.add(getString(R.string.string_homepage2));
@@ -75,14 +104,27 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
 // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
 //启动定位
        mlocationClient.startLocation();
-        handler.postDelayed(runnable, 5000);
+//        handler.postDelayed(runnable, 5000);
         initView();
+
+        //Intent intent = new Intent(this, UploadGPSService.class);
+       // intent.putExtra("from", "ActivityA");
+//        intent.putExtra("from", "ActivityA");
+//        intent.putExtra("from", "ActivityA");
+       // Log.i("Kathy", "----------------------------------------------------------------------");
+       // Log.i("Kathy", "ActivityA 执行 bindService");
+        //bindService(intent, conn, BIND_AUTO_CREATE);
+        //启动servicce服务
+        //startService(intent);
+
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        handler.removeCallbacks(runnable);
+       // handler.removeCallbacks(runnable);
+       // unbindService(conn);
+        isBind = false;
     }
 
     void initView(){
@@ -120,7 +162,7 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
                     .setMessage(R.string.closeapp)
                     .setPositiveButton(getString(R.string.ok),new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            handler.removeCallbacks(runnable);
+                            //handler.removeCallbacks(runnable);
                             HomePageActivity.this.finish(); // back button
                         }
                     })

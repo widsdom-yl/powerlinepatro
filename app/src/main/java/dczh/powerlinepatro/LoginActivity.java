@@ -162,10 +162,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         lod.dialogShow();
 
 
+        String deviceToken  = AccountManager.getInstance().getDefaultDeviceToken();
         OkHttpClient client = new OkHttpClient();
         FormBody formBody = new FormBody.Builder()
                 .add("user", mUserName)
                 .add("pass", mPassword)
+                .add("devicetoken", deviceToken)
                 .build();
 
 
@@ -208,9 +210,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         lod.dismiss();
                         if (model != null && model.error_code==0){
                             String body = new Gson().toJson(model.data);
-                            AccountManager.getInstance().saveAccount(mUserName, mPassword, IsAutoLogin);
                             UserModel userModel = new Gson().fromJson(body,UserModel.class);
 //
+                            AccountManager.getInstance().saveAccount(mUserName, mPassword,userModel.getName(), IsAutoLogin);
 //                            String token = model.getData().getToken();
                             Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
                             Bundle bundle = new Bundle();

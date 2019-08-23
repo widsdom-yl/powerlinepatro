@@ -2,6 +2,7 @@ package dczh.powerlinepatro;
 //https://lanhuapp.com/url/7RsrQ
 //http://gz.aliyuns.vip/adm/log.php
 //https://www.showdoc.cc/317380933238324
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.umeng.message.PushAgent;
 
 import java.io.IOException;
 
@@ -33,6 +35,8 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PushAgent.getInstance(this).onAppStart();
+
         getSupportActionBar().hide();
         setContentView(R.layout.activity_splash);
 
@@ -56,7 +60,7 @@ public class SplashActivity extends AppCompatActivity {
                     openLoginActivity();
                 }
             }
-        }, 1 * 2000);
+        }, 1 * 5000);
 
     }
 
@@ -68,14 +72,15 @@ public class SplashActivity extends AppCompatActivity {
 
     public void login(final String mUserName, final String mPassword) {
 
-
-
-
+        String deviceToken  = AccountManager.getInstance().getDefaultDeviceToken();
         OkHttpClient client = new OkHttpClient();
         FormBody formBody = new FormBody.Builder()
                 .add("user", mUserName)
                 .add("pass", mPassword)
+                .add("devicetoken", deviceToken)
                 .build();
+
+
         final Request request = new Request.Builder()
                 .url(Config.serverUrl+"login.php")
                 .post(formBody)
@@ -109,14 +114,16 @@ public class SplashActivity extends AppCompatActivity {
 
                         if (model != null && model.error_code==0){
                             String body = new Gson().toJson(model.data);
-                            AccountManager.getInstance().saveAccount(mUserName, mPassword, IsAutoLogin);
+
                             UserModel userModel = new Gson().fromJson(body,UserModel.class);
 //
+                            AccountManager.getInstance().saveAccount(mUserName, mPassword,userModel.getName(), IsAutoLogin);
 //                            String token = model.getData().getToken();
                             Intent intent = new Intent(SplashActivity.this, HomePageActivity.class);
                             Bundle bundle = new Bundle();
                             bundle.putInt("uid",userModel.getUid());
                             intent.putExtras(bundle);
+                            AccountManager.getInstance().setUid(userModel.getUid());
                             AccountManager.getInstance().setUid(userModel.getUid());
                             AccountManager.getInstance().setToken(userModel.getToken());
                             startActivity(intent);
