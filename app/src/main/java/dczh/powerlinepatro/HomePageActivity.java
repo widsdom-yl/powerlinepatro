@@ -85,7 +85,9 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
         list.add(getString(R.string.string_homepage0));
         list.add(getString(R.string.string_homepage5));
         list.add(getString(R.string.string_homepage2));
+        list.add(getString(R.string.string_danger));
         list.add(getString(R.string.string_homepage4));
+        list.add(getString(R.string.string_homepage6));
 
         mlocationClient = new AMapLocationClient(this);
 //初始化定位参数
@@ -201,8 +203,13 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
                 break;
             case 3:
 
-                Intent intent3 = new Intent(this, UploadNegotiationActivity.class);
+                Intent intent3 = new Intent(this, DangerListActivity.class);
                 startActivity(intent3);
+                break;
+            case 4:
+
+                Intent intent4 = new Intent(this, UploadNegotiationActivity.class);
+                startActivity(intent4);
                 break;
                 default:
                     break;

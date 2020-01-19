@@ -70,7 +70,13 @@
         <receiver
             android:name="dczh.BroadCast.MyBroadcastReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true" />
+
+        <activity android:name=".DangerListActivity" />
+        <activity android:name=".DangerDetailActivity" />
+        <activity android:name=".DangerPatroDailyActivity" />
+        <activity android:name=".DangerDailyUploadActivity" />
+
     </application>
 
 </manifest>

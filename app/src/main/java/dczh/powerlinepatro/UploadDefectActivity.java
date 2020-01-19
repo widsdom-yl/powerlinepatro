@@ -2,6 +2,7 @@ package dczh.powerlinepatro;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -171,28 +173,64 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.button_sign_defect){
-            if (mFileArray.size()>1){
-                if (lod == null)
-                {
-                    lod = new LoadingDialog(this);
-                }
-                lod.dialogShow();
-                if (mFileArray.get(mFileArray.size()-1).length()>0){
-                    patrolImageCount = mFileArray.size();
-                }
-                else{
-                    patrolImageCount = mFileArray.size()-1;
-                }
-                uploadedCount=0;
-                compressFiles.clear();
-                for (String fileName : mFileArray){
-                    compressPhoto(fileName);
-                }
-
-            }
+            showAlertDialog();
         }
 
     }
+    void uplaodDefect(){
+        if (mFileArray.size()>1){
+            if (lod == null)
+            {
+                lod = new LoadingDialog(this);
+            }
+            lod.dialogShow();
+            if (mFileArray.get(mFileArray.size()-1).length()>0){
+                patrolImageCount = mFileArray.size();
+            }
+            else{
+                patrolImageCount = mFileArray.size()-1;
+            }
+            uploadedCount=0;
+            compressFiles.clear();
+            for (String fileName : mFileArray){
+                compressPhoto(fileName);
+            }
+
+        }
+    }
+    private AlertDialog alertDialog2; //
+    private int choice = 0;//0-一般 ,1-危急
+    public void showAlertDialog(){
+        final String[] items = {getString(R.string.string_defect_level_common),getString(R.string.string_defect_level_critical)};
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setTitle(getString(R.string.string_choose_defect_level));
+        alertBuilder.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                choice = i;
+            }
+        });
+
+        alertBuilder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                alertDialog2.dismiss();
+            }
+        });
+
+        alertBuilder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                alertDialog2.dismiss();
+                uplaodDefect();
+            }
+        });
+
+        alertDialog2 = alertBuilder.create();
+        alertDialog2.show();
+    }
+
+
     private void showSheet() {
         actionSheet=new ActionSheet.DialogBuilder(this)
                 .addSheet(getString(R.string.string_album), new View.OnClickListener() {

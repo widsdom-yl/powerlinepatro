@@ -9,16 +9,16 @@ public class Config {
 
 
 
-
-   /* public static final String baseUrl = "http://gz.aliyuns.vip/svr/";
+    public static final String rootUrl = "http://gz.aliyuns.vip/";
+    public static final String baseUrl = "http://gz.aliyuns.vip/svr/";
     public static final String serverUrl = "http://gz.aliyuns.vip/svr/user/";
     public static final String workUrl = "http://gz.aliyuns.vip/svr/work/";
-    public static final String gblUrl = "http://gz.aliyuns.vip/svr/gbl/";*/
+    public static final String gblUrl = "http://gz.aliyuns.vip/svr/gbl/";
 
-    public static final String baseUrl = "http://g1.aliyuns.vip/svr/";
-    public static final String serverUrl = "http://g1.aliyuns.vip/svr/user/";
-    public static final String workUrl = "http://g1.aliyuns.vip/svr/work/";
-    public static final String gblUrl = "http://g1.aliyuns.vip/svr/gbl/";
+//    public static final String baseUrl = "http://g1.aliyuns.vip/svr/";
+//    public static final String serverUrl = "http://g1.aliyuns.vip/svr/user/";
+//    public static final String workUrl = "http://g1.aliyuns.vip/svr/work/";
+//    public static final String gblUrl = "http://g1.aliyuns.vip/svr/gbl/";
     //http://gz.aliyuns.vip/svr/gbl
     //https://www.showdoc.cc/240135450293679?page_id=1368009207406445
     public static int packageCode(Context context) {

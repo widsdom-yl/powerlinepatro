@@ -475,7 +475,7 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         File file=new File(fileName);
         Luban.with(this)
                 .load(file)
-                .ignoreBy(100)
+                .ignoreBy(10)
                 .setTargetDir(fileDir.getAbsolutePath())
                 .filter(new CompressionPredicate() {
                     @Override
@@ -605,6 +605,7 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
                             finishUploadImage(model);
                         }
                         else{
+                            lod.dismiss();
                             Toast.makeText(UploadPatroActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_LONG).show();
                         }
                     }

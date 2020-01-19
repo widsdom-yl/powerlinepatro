@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/item_seletor"
+    android:layout_height="64dp">
+
+
+    <TextView
+        android:id="@+id/text_title"
+        android:textColor="#333333"
+        android:textSize="14sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        />
+
+
+
+    <TextView
+        android:id="@+id/text_danger_level"
+        android:textColor="#333333"
+        android:textSize="14sp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        />
+
+    <TextView
+        android:id="@+id/text_danger_create_time"
+        android:textColor="#969696"
+        android:textSize="13sp"
+        android:layout_toLeftOf="@+id/image_tower_icon"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/text_title"
+        android:layout_marginTop="5dp"
+        android:text="@string/string_danger_create_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <TextView
+        android:id="@+id/text_danger_create_worker"
+        android:textColor="#969696"
+        android:textSize="13sp"
+        android:layout_toLeftOf="@+id/image_tower_icon"
+        android:layout_toRightOf="@+id/text_danger_create_time"
+        android:layout_marginLeft="25dp"
+        android:layout_below="@+id/text_title"
+        android:layout_marginTop="5dp"
+        android:text="@string/string_danger_create_worker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <ImageView
+        android:id="@+id/image_line"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_toLeftOf="@+id/text_line_count"
+        android:src="@mipmap/littlearrow"
+        />
+
+</RelativeLayout>

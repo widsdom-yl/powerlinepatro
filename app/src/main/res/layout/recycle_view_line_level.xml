@@ -56,12 +56,12 @@
         />
     <ImageView
         android:id="@+id/image_line"
-        android:layout_width="18dp"
+        android:layout_width="11dp"
         android:layout_height="18dp"
         android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
-        android:layout_toLeftOf="@+id/text_line_count"
-        android:src="@drawable/icon_line"
+        android:src="@mipmap/littlearrow"
         />
 
 </RelativeLayout>

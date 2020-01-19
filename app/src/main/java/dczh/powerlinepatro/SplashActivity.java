@@ -1,5 +1,5 @@
 package dczh.powerlinepatro;
-//https://lanhuapp.com/url/7RsrQ
+//https://lanhuapp.com/web/#/item/project/board?type=share_mark&pid=1c711288-ba37-44ab-ad14-aff3d0ef325e&activeSectionId=&teamId=9e300c93-502b-4d73-b063-f9237b97e6db&param=69919eb8-e26e-4e9f-a142-6a988c4bcfa9
 //http://gz.aliyuns.vip/adm/log.php
 //https://www.showdoc.cc/317380933238324
 

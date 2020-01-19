@@ -13,6 +13,7 @@
         <item name="android:textAllCaps">false</item>
         <item name="actionMenuTextAppearance">@style/MenuItemTextAppearance</item>
     </style>
+
     <style name="Theme.MyAppTheme" parent="AppTheme">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -39,6 +40,7 @@
         <item name="android:windowBackground">@null</item>
 
     </style>
+
     <style name="RadioButton">
         <item name="android:textColor">@drawable/button_text_color</item>
         <item name="android:minHeight">33dp</item>
@@ -53,6 +55,7 @@
         <item name="colorControlNormal">@color/appGreenColor</item>
         <item name="colorControlActivated">@color/appGreenColor</item>
     </style>
+
     <style name="MyLoginCheckBox" parent="Theme.AppCompat.Light">
         <item name="colorControlNormal">@color/loginGreenColor</item>
         <item name="colorControlActivated">@color/loginGreenColor</item>
@@ -62,6 +65,7 @@
     <style name="CustomGreenCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
         <item name="android:button">@drawable/checkbox_green_style</item>
     </style>
+
     <style name="ActionSheetStyle" parent="@android:style/Theme.Dialog">
         <!-- 背景透明 -->
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -85,6 +89,14 @@
         <item name="android:windowExitAnimation">@anim/actionsheet_out</item>
     </style>
 
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
 </resources>

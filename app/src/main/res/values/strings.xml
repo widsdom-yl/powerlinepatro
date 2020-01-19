@@ -1,4 +1,5 @@
 <resources>
+    <!--<string name="app_name">危险源值守</string>-->
     <string name="app_name">线路巡视</string>
     <string name="txtLogin">登录</string>
     <string name="action_check_remeber_pwd">自动登录</string>
@@ -11,6 +12,7 @@
     <string name="string_homepage3">个人中心</string>
     <string name="string_homepage4">上传交涉</string>
     <string name="string_homepage5">交跨物</string>
+    <string name="string_homepage6">敬请期待</string>
 
     <string name="string_uploadposition">上传轨迹</string>
     <string name="string_uploadpatrol">一键巡视</string>
@@ -80,5 +82,29 @@
     <string name="closeapp">确定退出？</string>
     <string name="exit_login">退出登陆</string>
     <string name="error_relogin">登陆失效，请重新登陆</string>
+    <string name="string_choose_defect_level">请选择缺陷等级</string>
+    <string name="string_defect_level_critical">危急</string>
+    <string name="string_defect_level_common">一般</string>
+    <string name="string_danger">危险源</string>
+    <string name="string_danger_level">等级</string>
+    <string name="string_danger_level0">特级</string>
+    <string name="string_danger_level1">一级</string>
+    <string name="string_danger_level2">二级</string>
+    <string name="string_danger_create_time">建立时间:</string>
+    <string name="string_danger_create_worker">建立人:</string>
+    <string name="string_danger_information">危险源详情:</string>
+    <string name="string_danger_date_information">每日详情</string>
+    <string name="string_danger_sign">巡视登记</string>
+    <string name="string_danger_patro_worker">巡视人</string>
+    <string name="string_danger_patro_time">时间</string>
+    <string name="string_refresh">刷新</string>
+    <string name="string_daily">每日详情</string>
+    <string name="string_danger_upload_time">巡视时间:</string>
+    <string name="string_danger_upload_worker">巡视人:</string>
+    <string name="string_danger_scene_process">工程进度:</string>
+    <string name="string_danger_judge">今日是否有大型施工车辆:</string>
+    <string name="string_yes">是</string>
+    <string name="string_no">否</string>
+    <string name="string_danger_daily_upload">危险源巡视登记</string>
 
 </resources>

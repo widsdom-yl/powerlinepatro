@@ -1,7 +1,13 @@
 package dczh.model;
 
 public class UploadFileRetModel {
+    public UploadFileRetModel(String u){
+        url = u;
+    }
     public String getUrl() {
+        if (!url.contains("gz.aliyuns.vip")){
+            url = "http://gz.aliyuns.vip/"+url;
+        }
         return url;
     }
 
