@@ -50,7 +50,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tx_danger_process" />
 
     <CheckBox
-        android:id="@+id/btn_danger_judge"
+        android:id="@+id/checkbox_danger_judge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -72,7 +72,7 @@
 
 
     <EditText
-        android:id="@+id/edit_defect"
+        android:id="@+id/edit_note"
         android:layout_width="0dp"
         android:layout_height="70dp"
         android:layout_marginEnd="20dp"
@@ -97,7 +97,6 @@
         android:background="#ededed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toBottomOf="@+id/edit_defect" />
 
     <ImageButton
@@ -107,11 +106,10 @@
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="30dp"
-        android:background="@mipmap/danger_upd_bg"
+        android:src="@mipmap/danger_upd_bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-
-        app:layout_constraintTop_toBottomOf="@+id/edit_defect" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_note" />
 
 
     <ImageButton
@@ -124,6 +122,22 @@
         android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/image_upload" />
+
+    <Button
+        android:id="@+id/button_submit"
+        style="?android:textAppearanceSmall"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginStart="60dp"
+        android:background="@drawable/button_shape_upload_patro"
+        android:text="@string/string_submit"
+        android:textAllCaps="false"
+        android:textColor="#ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

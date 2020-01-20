@@ -502,7 +502,6 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
                             uploadImageData(compressFiles);
                         }
                     }
-
                     @Override
                     public void onError(Throwable e) {
                         Log.e(tag,"onError"+e.getLocalizedMessage());
@@ -512,10 +511,6 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
     }
 /*上传文件*/
     public void uploadImageData(List<String> compressFiles){
-
-
-
-
         if (AccountManager.getInstance().getToken() == null || AccountManager.getInstance().getUid() ==0){
             Toast.makeText(UploadPatroActivity.this, getString(R.string.error_relogin), Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, LoginActivity.class);
