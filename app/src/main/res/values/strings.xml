@@ -106,5 +106,6 @@
     <string name="string_yes">是</string>
     <string name="string_no">否</string>
     <string name="string_danger_daily_upload">危险源巡视登记</string>
+    <string name="string_danger_name">危险源名称：</string>
 
 </resources>

@@ -6,8 +6,124 @@
     android:layout_height="match_parent"
     tools:context=".DangerDailyUploadActivity">
 
+    <TextView
+        android:id="@+id/tx_danger_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/string_danger_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tx_danger_process"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/string_danger_scene_process"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tx_danger_name" />
+
+    <SeekBar
+        android:id="@+id/seek_danger_process"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:max="100"
+        android:maxHeight="2dp"
+        android:progress="30"
+        android:thumb="@mipmap/seekthumb"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tx_danger_process"
+        app:layout_constraintTop_toTopOf="@+id/tx_danger_process" />
+
+    <TextView
+        android:id="@+id/tx_danger_scene"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/string_danger_judge"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tx_danger_process" />
+
+    <CheckBox
+        android:id="@+id/btn_danger_judge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@+id/tx_danger_scene"
+        app:layout_constraintTop_toTopOf="@+id/tx_danger_scene"
+        style="@style/CustomCheckBoxTheme"
+        />
+
+    <TextView
+        android:id="@+id/tx_note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/string_remark"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tx_danger_scene" />
 
 
+    <EditText
+        android:id="@+id/edit_defect"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="15dp"
+        android:padding="5dp"
+        android:minLines="5"
+        android:gravity="top"
+        android:background="@drawable/order_edt_note_bg"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tx_note"
+        app:layout_constraintTop_toTopOf="@+id/tx_note" />
+
+    <View
+
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
+        android:background="#ededed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toBottomOf="@+id/edit_defect" />
+
+    <ImageButton
+        android:id="@+id/image_upload"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
+        android:background="@mipmap/danger_upd_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toBottomOf="@+id/edit_defect" />
+
+
+    <ImageButton
+        android:id="@+id/button_delete"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/close"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/image_upload" />
 
 
 </android.support.constraint.ConstraintLayout>
