@@ -10,6 +10,10 @@ public class UploadFileRetModel {
         }
         return url;
     }
+    public String getOriUrl() {
+
+        return url;
+    }
 
     public void setUrl(String url) {
         this.url = url;

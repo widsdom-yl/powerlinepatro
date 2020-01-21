@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.github.nuptboyzhb.lib.SuperSwipeRefreshLayout;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -39,6 +40,7 @@ public class DangerPatroDailyActivity extends BaseAppCompatActivity implements B
     DangerPatroDailyAdapter adapter;
     List<DangerPatroDailyModel> mList = new ArrayList<>();
     Button btn_upload;
+    SuperSwipeRefreshLayout swipeRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,9 +54,31 @@ public class DangerPatroDailyActivity extends BaseAppCompatActivity implements B
         mListView = findViewById(R.id.listview);
        // mListView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mListView.setLayoutManager(new LinearLayoutManager(this));
-
+        swipeRefreshLayout = (SuperSwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         btn_upload = findViewById(R.id.button_upload);
         btn_upload.setOnClickListener(this);
+
+        swipeRefreshLayout
+                .setOnPullRefreshListener(new SuperSwipeRefreshLayout.OnPullRefreshListener() {
+
+                    @Override
+                    public void onRefresh() {
+                        //TODO 开始刷新
+                        requestDailyPatroList();
+                    }
+
+                    @Override
+                    public void onPullDistance(int distance) {
+                        //TODO 下拉距离
+                    }
+
+                    @Override
+                    public void onPullEnable(boolean enable) {
+                        //TODO 下拉过程中，下拉的距离是否足够出发刷新
+                    }
+                });
+
+
     }
 
     @Override
@@ -111,6 +135,7 @@ public class DangerPatroDailyActivity extends BaseAppCompatActivity implements B
                     @Override
                     public void run() {
                         lod.dismiss();
+                        swipeRefreshLayout.setRefreshing(false);
                         Toast.makeText(DangerPatroDailyActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -128,6 +153,7 @@ public class DangerPatroDailyActivity extends BaseAppCompatActivity implements B
                     public void run() {
                         //
                         lod.dismiss();
+                        swipeRefreshLayout.setRefreshing(false);
                         if (model != null && model.error_code==0){
                             String body = new Gson().toJson(model.data);
                             List<DangerPatroDailyModel> lists = GsonUtil.parseJsonArrayWithGson(body, DangerPatroDailyModel[].class);

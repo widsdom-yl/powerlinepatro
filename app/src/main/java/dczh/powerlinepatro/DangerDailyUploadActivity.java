@@ -69,9 +69,10 @@ public class DangerDailyUploadActivity extends BaseAppCompatActivity implements 
     CheckBox checkbox_danger_judge;
     Button button_submit;
 
+
     int gcj;//工程进度
     int icl;//近日是否有大型施工车辆
-    String note;//备注
+
     String filePath="";//图片路径
 
     private ActionSheet actionSheet;//选择图片方式
@@ -366,6 +367,12 @@ public class DangerDailyUploadActivity extends BaseAppCompatActivity implements 
             return;
         }
 
+        if (lod == null)
+        {
+            lod = new LoadingDialog(this);
+        }
+        lod.dialogShow();
+
         OkHttpClient client = new OkHttpClient();
 
 
@@ -441,6 +448,7 @@ public class DangerDailyUploadActivity extends BaseAppCompatActivity implements 
                         //
 
                         if (model != null && model.error_code==0){
+                            lod.dismiss();
                             String body = new Gson().toJson(model.data);
                             UploadFileRetModel model = GsonUtil.parseJsonWithGson(body, UploadFileRetModel.class);
 //
@@ -469,8 +477,10 @@ public class DangerDailyUploadActivity extends BaseAppCompatActivity implements 
                 .add("pid", ""+dangerModel.getId())
                 .add("token", AccountManager.getInstance().getToken())
                 .add("uid", ""+AccountManager.getInstance().getUid())
-                .add("gcj", ""+gcj)
+                .add("gcj", ""+gcj+"%")
                 .add("icl", ""+icl)
+                .add("img", retModel.getOriUrl())
+                .add("cmt", ""+icl)
                 .build();
 
 
@@ -508,7 +518,13 @@ public class DangerDailyUploadActivity extends BaseAppCompatActivity implements 
                             lod.dismiss();
                         }
                         else{
-                            Toast.makeText(DangerDailyUploadActivity.this, getString(R.string.string_danger_daily_upload_failed), Toast.LENGTH_LONG).show();
+                            if (model.error_code == 1003){
+                                Toast.makeText(DangerDailyUploadActivity.this,getString(R.string.string_danger_daily_upload_failed)+":"+model.error_msg+getString(R.string.string_danger_daily_reupload), Toast.LENGTH_LONG).show();
+                            }
+                            else{
+                                Toast.makeText(DangerDailyUploadActivity.this,getString(R.string.string_danger_daily_upload_failed)+":"+model.error_msg, Toast.LENGTH_LONG).show();
+
+                            }
                             lod.dismiss();
                         }
                     }

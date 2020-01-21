@@ -215,6 +215,7 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 alertDialog2.dismiss();
+                uplaodDefect();
             }
         });
 
@@ -222,7 +223,7 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 alertDialog2.dismiss();
-                uplaodDefect();
+
             }
         });
 
@@ -306,7 +307,7 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case RC_TAKE_PHOTO:   //拍照权限申请返回
-                if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED ) {
                     takePhoto();
                 }
                 break;
@@ -638,7 +639,9 @@ public class UploadDefectActivity extends BaseAppCompatActivity implements View.
                 .add("token", AccountManager.getInstance().getToken())
                 .add("uid", ""+AccountManager.getInstance().getUid())
                 .add("nme", defectInfo)
-                .add("img", retModel.getUrl())
+                .add("dgr", ""+choice)
+                .add("img", retModel.getOriUrl())
+
                 .build();
 
 

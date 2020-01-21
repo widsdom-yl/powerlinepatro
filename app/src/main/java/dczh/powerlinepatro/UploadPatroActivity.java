@@ -619,7 +619,7 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
                 .add("token", AccountManager.getInstance().getToken())
                 .add("uid", ""+AccountManager.getInstance().getUid())
                 .add("nme", "11")
-                .add("img", retModel.getUrl())
+                .add("img", retModel.getOriUrl())
                 .build();
 
 
