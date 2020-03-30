@@ -110,5 +110,6 @@
     <string name="string_danger_daily_upload_success">危险源巡视记录已上传!</string>
     <string name="string_danger_daily_upload_failed">危险源巡视记录上传失败!</string>
     <string name="string_danger_daily_reupload">,如需再次上传,请联系管理源删除当日已巡视记录!</string>
+    <string name="error_distance">请在距离当前选择杆塔200米内上传巡视记录！</string>
 
 </resources>

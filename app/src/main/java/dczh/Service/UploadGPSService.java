@@ -36,8 +36,8 @@ public class UploadGPSService extends Service implements AMapLocationListener {
 
     public AMapLocationClient mlocationClient;
     public AMapLocationClientOption mLocationOption = null;
-    double lat;
-    double lot;
+    public double lat;
+    public double lot;
 
     //初始化同志channel
     public static final String CHANNEL_ID_LOCATION = "dczh.Service";
@@ -54,7 +54,9 @@ public class UploadGPSService extends Service implements AMapLocationListener {
         lot = (double) latLng.longitude;
     }
 
-    Handler handler = new Handler();
+    Handler handler_afteruploadimage = new Handler(); // 用户上传图片后，3s之后上传用户位置信息
+
+    Handler handler = new Handler();//app启动时候，调用hander，然后每5分钟调用一次
     Runnable runnable = new Runnable()
     {
         @Override
@@ -66,22 +68,31 @@ public class UploadGPSService extends Service implements AMapLocationListener {
             handler.postDelayed(runnable, 1000*60*5);
         }
     };
+    Runnable runnable_afteruploadimage = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            if (lat >0 && lot>0){
+                uploadWorkerPos(lat,lot);
+            }
+        }
+    };
+
 
     //client 可以通过Binder获取Service实例
     public class MyBinder extends Binder {
         public UploadGPSService getService() {
             return UploadGPSService.this;
         }
+
+
     }
 
     //通过binder实现调用者client与Service之间的通信
     private MyBinder binder = new MyBinder();
 
 
-
-
-    public UploadGPSService() {
-    }
     @Override
     public void onCreate() {
         Log.i("UploadGPSService","onCreate - Thread ID = " + Thread.currentThread().getId());
@@ -114,33 +125,32 @@ public class UploadGPSService extends Service implements AMapLocationListener {
       //  handler.postDelayed(runnable, 5000);
         mlocationClient.startLocation();
 
-        handler.postDelayed(runnable, 3000);
+
 
         super.onCreate();
     }
-
+//通过startService()，会执行这个方法
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("UploadGPSService", "onStartCommand - startId = " + startId + ", Thread ID = " + Thread.currentThread().getId());
        // return super.onStartCommand(intent, flags, startId);
+        handler.postDelayed(runnable, 3000);
         return  START_STICKY;
     }
+    //通过bindService调用，会执行这个方法
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        Log.i("UploadGPSService", "TestTwoService - onBind - Thread = " + Thread.currentThread().getName());
-//        Log.i("Kathy", "TestTwoService - onbind - from = " + intent.getStringExtra("from"));
-//        mlocationClient.startLocation();
-//        handler.postDelayed(runnable, 10000);
-//        return binder;
-        return null;
+       Log.e("UploadGPSService", "TestTwoService - onbind - from = " + intent.getStringExtra("from"));
+       if (!mlocationClient.isStarted()){
+           mlocationClient.startLocation();
+       }
+       return binder;
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
         Log.i("UploadGPSService", "TestTwoService - onUnbind - from = " + intent.getStringExtra("from"));
-//        mlocationClient.stopLocation();
-//        handler.removeCallbacks(runnable);
 
         return false;
     }
@@ -152,17 +162,12 @@ public class UploadGPSService extends Service implements AMapLocationListener {
         handler.removeCallbacks(runnable);
         super.onDestroy();
 
-//        Intent intent = new Intent(this, UploadGPSService.class);
-//        // intent.putExtra("from", "ActivityA");
-////        intent.putExtra("from", "ActivityA");
-////        intent.putExtra("from", "ActivityA");
-//        Log.i("UploadGPSService", "重新启动service");
-//        //bindService(intent, conn, BIND_AUTO_CREATE);
-//        //启动servicce服务
-//        startService(intent);
-
 
     }
+    public void uploadPosDelay3S() {
+        handler_afteruploadimage.postDelayed(runnable_afteruploadimage,3000);
+    }
+
 
 
     private final Random generator = new Random();
@@ -174,13 +179,6 @@ public class UploadGPSService extends Service implements AMapLocationListener {
     }
 
     public void uploadWorkerPos(double lat,double lot) {
-
-//        if (lod == null)
-//        {
-//            lod = new LoadingDialog(this);
-//        }
-//        lod.dialogShow();
-
 
         if (AccountManager.getInstance().getToken() == null || AccountManager.getInstance().getUid() ==0){
 

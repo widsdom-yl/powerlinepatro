@@ -1,12 +1,18 @@
 package dczh.powerlinepatro;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -54,6 +60,9 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
 
     private UploadGPSService service = null;
     private boolean isBind = false;
+
+
+
 
     private ServiceConnection conn = new ServiceConnection() {
         @Override
@@ -106,19 +115,8 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
 // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
 //启动定位
        mlocationClient.startLocation();
-//        handler.postDelayed(runnable, 5000);
-        initView();
-
-        //Intent intent = new Intent(this, UploadGPSService.class);
-       // intent.putExtra("from", "ActivityA");
-//        intent.putExtra("from", "ActivityA");
-//        intent.putExtra("from", "ActivityA");
-       // Log.i("Kathy", "----------------------------------------------------------------------");
-       // Log.i("Kathy", "ActivityA 执行 bindService");
-        //bindService(intent, conn, BIND_AUTO_CREATE);
-        //启动servicce服务
-        //startService(intent);
-
+       initView();
+       requestPermisson();
     }
 
     @Override
@@ -269,8 +267,6 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-//                lod.dismiss();
-//                Toast.makeText(HomePageActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -278,21 +274,6 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
                 final String res = response.body().string();
                 Log.e(tag,"res is "+res);
                 final ResponseModel model  = GsonUtil.parseJsonWithGson(res,ResponseModel.class);
-
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        //
-//                        lod.dismiss();
-//                        if (model != null && model.error_code==0){
-//                            Toast.makeText(HomePageActivity.this, getString(R.string.string_uploadsuccess), Toast.LENGTH_LONG).show();
-//
-//                        }
-//                        else{
-//                            Toast.makeText(HomePageActivity.this, getString(R.string.string_uploadfailed), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//                });
             }
         });
 
@@ -333,5 +314,72 @@ public class HomePageActivity extends BaseAppCompatActivity implements BaseAdapt
             handler.postDelayed(runnable, 1000*60*5);
         }
     };
+
+    //permission
+    String[] permissions = new String[]{
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
+    private String[] denied;
+    void requestPermisson()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        {
+            ArrayList<String> list = new ArrayList<>();
+            for (int i = 0; i < permissions.length; i++)
+            {
+                if (PermissionChecker.checkSelfPermission(this, permissions[i]) != PackageManager.PERMISSION_GRANTED)
+                {
+                    list.add(permissions[i]);
+                }
+            }
+            if (list.size() != 0)
+            {
+                denied = new String[list.size()];
+                for (int i = 0; i < list.size(); i++)
+                {
+//                    Log.e(tag, "add deny:" + i);
+                    denied[i] = list.get(i);
+
+                }
+                ActivityCompat.requestPermissions(this, denied, 321);
+
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
+
+
+        boolean isDenied = false;
+        for (int i = 0; i < denied.length; i++)
+        {
+            String permission = denied[i];
+            for (int j = 0; j < permissions.length; j++)
+            {
+                if (permissions[j] != null && permissions[j].equals(permission))
+                {
+                    if (grantResults[j] != PackageManager.PERMISSION_GRANTED)
+                    {
+                        isDenied = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if (isDenied)
+        {
+            //  Toast.makeText(this, getString(R.string.string_openPermission), Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+
+
+        }
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 
 }

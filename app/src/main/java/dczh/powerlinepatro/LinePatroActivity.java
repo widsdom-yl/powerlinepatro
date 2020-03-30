@@ -39,11 +39,12 @@ import okhttp3.Response;
 
 
 public class LinePatroActivity extends BaseAppCompatActivity implements BaseExpandableRecyclerViewAdapter.ExpandableRecyclerViewOnClickListener<LineLevelModel, LineModel> {
-
+//电压登记排列，一级菜单为电压等级，二级菜单为线路名称
     List<LineLevelModel> mLineLevelList=new ArrayList<LineLevelModel>();
     LineLevelAdapter mAdapter;
     RecyclerView mRecyclerView;
     TreeMap levelHashMap=new TreeMap();//key：线路电压登记 value：LineModel array
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

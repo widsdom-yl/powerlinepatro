@@ -516,6 +516,7 @@ public class DangerDailyUploadActivity extends BaseAppCompatActivity implements 
                             Toast.makeText(DangerDailyUploadActivity.this, getString(R.string.string_danger_daily_upload_success), Toast.LENGTH_LONG).show();
                             ;
                             lod.dismiss();
+                            DangerDailyUploadActivity.this.finish();
                         }
                         else{
                             if (model.error_code == 1003){

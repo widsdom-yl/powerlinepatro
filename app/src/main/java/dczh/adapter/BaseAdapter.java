@@ -29,7 +29,7 @@ public class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder>
     @Override
     public BaseHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        //参数3 判断条件 true  1.打气 2.添加到paraent
+        //参数3 判断条件 true  1.打气 2.添加到parent
         // false 1.打气 （参考parent的宽度）
         View view = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
         BaseHolder holder = new BaseHolder(view);

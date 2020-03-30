@@ -6,7 +6,7 @@ public class UploadFileRetModel {
     }
     public String getUrl() {
         if (!url.contains("gz.aliyuns.vip")){
-            url = "http://gz.aliyuns.vip/"+url;
+            return  "http://gz.aliyuns.vip/"+url;
         }
         return url;
     }

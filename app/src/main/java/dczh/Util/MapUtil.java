@@ -2,6 +2,7 @@ package dczh.Util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 
 import com.amap.api.maps.model.LatLng;
@@ -86,6 +87,12 @@ public class MapUtil {
         double gg_lat = z * Math.sin(theta);
         double gg_lng = z * Math.cos(theta);
         return new LatLng(gg_lat, gg_lng);
+    }
+
+    public static float getDistance(double lat1,double lot1,double lat2,double lot2) {
+        float[] results=new float[1];
+        Location.distanceBetween(lat1, lot1, lat2, lot2, results);
+        return results[0];
     }
 
     /**

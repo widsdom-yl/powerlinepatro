@@ -2,11 +2,14 @@ package dczh.powerlinepatro;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -36,9 +39,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import dczh.Manager.AccountManager;
+import dczh.Service.UploadGPSService;
 import dczh.Util.Config;
 import dczh.Util.FileUtil;
 import dczh.Util.GsonUtil;
+import dczh.Util.MapUtil;
 import dczh.View.ActionSheet;
 import dczh.View.LoadingDialog;
 import dczh.adapter.BaseAdapter;
@@ -136,11 +141,30 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
         mAdpter.setmDeleteClickListener(this);
         findViewById(R.id.button_sign_parto).setOnClickListener(this);
         requestLineTowerArray();
+
+
+
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //绑定service
+        Intent intent = new Intent(this, UploadGPSService.class);
+        intent.putExtra("from", "UploadPatroActivity");
+        bindService(intent, conn, BIND_AUTO_CREATE);
+    }
+
     @Override
     public void onResume(){
         super.onResume();
         mAdpter.notifyDataSetChanged();
+    }
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        this.unbindService(conn);
+
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -171,6 +195,12 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.button_sign_parto){
+            Log.e(tag,"distance:"+model.getLat()+","+model.getLot()+","+service.lat+","+service.lot);
+            float distance = MapUtil.getDistance(model.getLat(),model.getLot(),service.lat,service.lot);
+            if (distance > 300){
+                Toast.makeText(UploadPatroActivity.this, getString(R.string.error_distance), Toast.LENGTH_LONG).show();
+                return;
+            }
             if (mFileArray.size()>1){
                 if (lod == null)
                 {
@@ -519,6 +549,7 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
             return;
         }
 
+        service.uploadPosDelay3S();
         OkHttpClient client = new OkHttpClient();
 
 
@@ -698,4 +729,23 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
     public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
+
+    //service
+    private ServiceConnection conn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder binder) {
+            isBind = true;
+            UploadGPSService.MyBinder myBinder = (UploadGPSService.MyBinder) binder;
+            service = myBinder.getService();
+            Log.i("UploadPatroActivity", "onServiceConnected");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBind = false;
+            Log.i("UploadPatroActivity", "ActivityA - onServiceDisconnected");
+        }
+    };
+    private UploadGPSService service = null;
+    private boolean isBind = false;
 }

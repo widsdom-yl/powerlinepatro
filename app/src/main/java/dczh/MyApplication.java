@@ -12,8 +12,6 @@ import com.umeng.message.PushAgent;
 
 import dczh.BroadCast.MyBroadcastReceiver;
 import dczh.Manager.AccountManager;
-
-
 public class MyApplication extends Application
 {
     public static final String TAG = MyApplication.class.getSimpleName();
@@ -46,7 +44,10 @@ public class MyApplication extends Application
         UMConfigure.init(this, "5d394b830cafb297a0000ce6", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, "c0dcac437ec55700efd0f264cbd0db0e");
 
         PushAgent mPushAgent = PushAgent.getInstance(this);
-//注册推送服务，每次调用register方法都会回调该接口
+//
+//
+//
+////注册推送服务，每次调用register方法都会回调该接口
         mPushAgent.register(new IUmengRegisterCallback() {
             @Override
             public void onSuccess(String deviceToken) {
