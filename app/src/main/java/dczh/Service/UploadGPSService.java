@@ -63,7 +63,7 @@ public class UploadGPSService extends Service implements AMapLocationListener {
         public void run()
         {
             if (lat >0 && lot>0){
-                uploadWorkerPos(lat,lot);
+               // uploadWorkerPos(lat,lot);//comment by gyl 不在后台传输gps位置信息，每次上传图片时候上传
             }
             handler.postDelayed(runnable, 1000*60*5);
         }
@@ -74,7 +74,7 @@ public class UploadGPSService extends Service implements AMapLocationListener {
         public void run()
         {
             if (lat >0 && lot>0){
-                uploadWorkerPos(lat,lot);
+               // uploadWorkerPos(lat,lot);//comment by gyl 不在后台传输gps位置信息，每次上传图片时候上传
             }
         }
     };

@@ -694,6 +694,7 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
                             ;
 
                             lod.dismiss();
+                            uploadWorkerPos(lat,lot);
                         }
                         else{
                             Toast.makeText(UploadPatroActivity.this, getString(R.string.error_request_failed), Toast.LENGTH_LONG).show();
@@ -704,6 +705,56 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
             }
         });
     }
+
+    public void uploadWorkerPos(double lat,double lot) {
+
+//        if (lod == null)
+//        {
+//            lod = new LoadingDialog(this);
+//        }
+//        lod.dialogShow();
+
+
+        if (AccountManager.getInstance().getToken() == null || AccountManager.getInstance().getUid() ==0){
+            Toast.makeText(UploadPatroActivity.this, getString(R.string.error_relogin), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            this.finish();
+            return;
+        }
+
+        OkHttpClient client = new OkHttpClient();
+        FormBody formBody = new FormBody.Builder()
+                .add("uid", ""+ AccountManager.getInstance().getUid())
+                .add("token",  AccountManager.getInstance().getToken())
+                .add("lot",  ""+lot)
+                .add("lat", ""+ lat)
+                .build();
+
+
+
+        final Request request = new Request.Builder()
+                .url(Config.workUrl+"pos_add.php")
+                .post(formBody)
+                .build();
+
+        Call call = client.newCall(request);
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String res = response.body().string();
+                Log.e(tag,"res is "+res);
+                final ResponseModel model  = GsonUtil.parseJsonWithGson(res,ResponseModel.class);
+            }
+        });
+
+    }
+
 
     LoadingDialog lod;
     static  final String tag = "UploadPatroActivity";
@@ -729,6 +780,7 @@ public class UploadPatroActivity extends BaseAppCompatActivity implements View.O
     public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
+
 
     //service
     private ServiceConnection conn = new ServiceConnection() {
